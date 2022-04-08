@@ -1,0 +1,222 @@
+------
+Drone: 1
+
+id: 0
+command: command
+response: ok
+start time: 2021-07-22 17:32:32.886000
+end_time: 2021-07-22 17:32:33.343000
+duration: 0.457
+
+id: 1
+command: battery?
+response: 81
+
+start time: 2021-07-22 17:32:37.933000
+end_time: 2021-07-22 17:32:37.983000
+duration: 0.05
+
+id: 2
+command: sn?
+response: 0TQZH8LED00LEE
+start time: 2021-07-22 17:32:38.949000
+end_time: 2021-07-22 17:32:38.951000
+duration: 0.002
+
+id: 3
+command: mon
+response: ok
+start time: 2021-07-22 17:32:39.962000
+end_time: 2021-07-22 17:32:39.974000
+duration: 0.012
+
+id: 4
+command: takeoff
+response: ok
+start time: 2021-07-22 17:32:39.978000
+end_time: 2021-07-22 17:32:44.256000
+duration: 4.278
+
+id: 5
+command: jump 200 0 100 60 0 m3 m6
+response: ok
+start time: 2021-07-22 17:32:44.607000
+end_time: 2021-07-22 17:32:52.007000
+duration: 7.4
+
+id: 6
+command: go 0 0 100 60 m6
+response: ok
+start time: 2021-07-22 17:32:57.400000
+end_time: 2021-07-22 17:32:58.384000
+duration: 0.984
+
+id: 7
+command: go 0 0 100 60 m6
+response: ok
+start time: 2021-07-22 17:33:07.468000
+end_time: 2021-07-22 17:33:08.227000
+duration: 0.759
+
+id: 8
+command: jump 130 0 100 60 0 m6 m7
+response: ok
+start time: 2021-07-22 17:33:14.288000
+end_time: 2021-07-22 17:33:18.579000
+duration: 4.291
+
+id: 9
+command: land
+response: ok
+start time: 2021-07-22 17:33:18.613000
+end_time: 2021-07-22 17:33:21.589000
+duration: 2.976
+
+------
+Drone: 2
+
+id: 0
+command: command
+response: ok
+start time: 2021-07-22 17:32:32.886000
+end_time: 2021-07-22 17:32:33.348000
+duration: 0.462
+
+id: 1
+command: battery?
+response: 85
+
+start time: 2021-07-22 17:32:37.932000
+end_time: 2021-07-22 17:32:37.988000
+duration: 0.056
+
+id: 2
+command: sn?
+response: 0TQZH8LED00LG8
+start time: 2021-07-22 17:32:38.947000
+end_time: 2021-07-22 17:32:38.960000
+duration: 0.013
+
+id: 3
+command: mon
+response: ok
+start time: 2021-07-22 17:32:39.959000
+end_time: 2021-07-22 17:32:39.977000
+duration: 0.018
+
+id: 4
+command: takeoff
+response: ok
+start time: 2021-07-22 17:32:39.980000
+end_time: 2021-07-22 17:32:44.565000
+duration: 4.585
+
+id: 5
+command: jump 200 0 100 60 0 m1 m4
+response: ok
+start time: 2021-07-22 17:32:44.605000
+end_time: 2021-07-22 17:32:51.093000
+duration: 6.488
+
+id: 6
+command: go 0 0 100 60 m4
+response: ok
+start time: 2021-07-22 17:32:57.401000
+end_time: 2021-07-22 17:32:58.589000
+duration: 1.188
+
+id: 7
+command: jump 180 0 100 60 0 m4 m8
+response: ok
+start time: 2021-07-22 17:33:07.448000
+end_time: 2021-07-22 17:33:14.196000
+duration: 6.748
+
+id: 8
+command: go 0 0 100 60 m8
+response: ok
+start time: 2021-07-22 17:33:14.287000
+end_time: 2021-07-22 17:33:14.909000
+duration: 0.622
+
+id: 9
+command: land
+response: ok
+start time: 2021-07-22 17:33:18.612000
+end_time: 2021-07-22 17:33:22.457000
+duration: 3.845
+
+------
+Drone: 3
+
+id: 0
+command: command
+response: ok
+start time: 2021-07-22 17:32:32.886000
+end_time: 2021-07-22 17:32:33.341000
+duration: 0.455
+
+id: 1
+command: battery?
+response: 85
+
+start time: 2021-07-22 17:32:37.931000
+end_time: 2021-07-22 17:32:37.976000
+duration: 0.045
+
+id: 2
+command: sn?
+response: 0TQZH8LED00LGD
+start time: 2021-07-22 17:32:38.948000
+end_time: 2021-07-22 17:32:38.995000
+duration: 0.047
+
+id: 3
+command: mon
+response: ok
+start time: 2021-07-22 17:32:39.961000
+end_time: 2021-07-22 17:32:39.964000
+duration: 0.003
+
+id: 4
+command: takeoff
+response: ok
+start time: 2021-07-22 17:32:39.965000
+end_time: 2021-07-22 17:32:44.351000
+duration: 4.386
+
+id: 5
+command: jump 230 0 100 60 0 m2 m5
+response: ok
+start time: 2021-07-22 17:32:44.606000
+end_time: 2021-07-22 17:32:57.354000
+duration: 12.748
+
+id: 6
+command: jump 200 0 100 60 0 m5 m1
+response: ok
+start time: 2021-07-22 17:32:57.399000
+end_time: 2021-07-22 17:33:07.401000
+duration: 10.002
+
+id: 7
+command: go 0 0 100 60 m1
+response: ok
+start time: 2021-07-22 17:33:07.466000
+end_time: 2021-07-22 17:33:07.608000
+duration: 0.142
+
+id: 8
+command: go 0 0 100 60 m1
+response: ok
+start time: 2021-07-22 17:33:14.286000
+end_time: 2021-07-22 17:33:15.971000
+duration: 1.685
+
+id: 9
+command: land
+response: ok
+start time: 2021-07-22 17:33:18.614000
+end_time: 2021-07-22 17:33:22.551000
+duration: 3.937
+

@@ -1,0 +1,300 @@
+------
+Drone: 1
+
+id: 0
+command: command
+response: ok
+start time: 2021-07-27 19:59:43.563000
+end_time: 2021-07-27 19:59:43.833000
+duration: 0.27
+
+id: 1
+command: battery?
+response: 33
+
+start time: 2021-07-27 19:59:48.590000
+end_time: 2021-07-27 19:59:48.640000
+duration: 0.05
+
+id: 2
+command: sn?
+response: 0TQZJ75ED01NN8
+start time: 2021-07-27 19:59:49.670000
+end_time: 2021-07-27 19:59:49.753000
+duration: 0.083
+
+id: 3
+command: mon
+response: ok
+start time: 2021-07-27 19:59:50.720000
+end_time: 2021-07-27 19:59:50.733000
+duration: 0.013
+
+id: 4
+command: takeoff
+response: ok
+start time: 2021-07-27 19:59:50.735000
+end_time: 2021-07-27 19:59:55.628000
+duration: 4.893
+
+id: 5
+command: jump 250 0 120 60 0 m5 m2
+response: ok
+start time: 2021-07-27 19:59:56.887000
+end_time: 2021-07-27 20:00:06.390000
+duration: 9.503
+
+id: 6
+command: jump 235 0 120 60 0 m2 m7
+response: ok
+start time: 2021-07-27 20:00:11.114000
+end_time: 2021-07-27 20:00:17.762000
+duration: 6.648
+
+id: 7
+command: land
+response: ok
+start time: 2021-07-27 20:00:22.569000
+end_time: 2021-07-27 20:00:27.046000
+duration: 4.477
+
+------
+Drone: 2
+
+id: 0
+command: command
+response: ok
+start time: 2021-07-27 19:59:43.563000
+end_time: 2021-07-27 19:59:43.871000
+duration: 0.308
+
+id: 1
+command: battery?
+response: 27
+
+start time: 2021-07-27 19:59:48.591000
+end_time: 2021-07-27 19:59:48.612000
+duration: 0.021
+
+id: 2
+command: sn?
+response: 0TQZJ75ED01P08
+start time: 2021-07-27 19:59:49.700000
+end_time: 2021-07-27 19:59:49.730000
+duration: 0.03
+
+id: 3
+command: mon
+response: ok
+start time: 2021-07-27 19:59:50.720000
+end_time: 2021-07-27 19:59:50.772000
+duration: 0.052
+
+id: 4
+command: takeoff
+response: ok
+start time: 2021-07-27 19:59:50.807000
+end_time: 2021-07-27 19:59:55.342000
+duration: 4.535
+
+id: 5
+command: jump 160 0 120 60 0 m3 m8
+response: ok
+start time: 2021-07-27 19:59:56.879000
+end_time: 2021-07-27 20:00:01.259000
+duration: 4.38
+
+id: 6
+command: jump 180 0 120 60 0 m8 m5
+response: ok
+start time: 2021-07-27 20:00:11.113000
+end_time: 2021-07-27 20:00:16.152000
+duration: 5.039
+
+id: 7
+command: land
+response: ok
+start time: 2021-07-27 20:00:22.561000
+end_time: 2021-07-27 20:00:25.636000
+duration: 3.075
+
+------
+Drone: 3
+
+id: 0
+command: command
+response: ok
+start time: 2021-07-27 19:59:43.564000
+end_time: 2021-07-27 19:59:43.863000
+duration: 0.299
+
+id: 1
+command: battery?
+response: 22
+
+start time: 2021-07-27 19:59:48.590000
+end_time: 2021-07-27 19:59:48.603000
+duration: 0.013
+
+id: 2
+command: sn?
+response: 0TQZH8LED00LGD
+start time: 2021-07-27 19:59:49.692000
+end_time: 2021-07-27 19:59:49.701000
+duration: 0.009
+
+id: 3
+command: mon
+response: ok
+start time: 2021-07-27 19:59:50.718000
+end_time: 2021-07-27 19:59:50.743000
+duration: 0.025
+
+id: 4
+command: takeoff
+response: ok
+start time: 2021-07-27 19:59:50.771000
+end_time: 2021-07-27 19:59:55.487000
+duration: 4.716
+
+id: 5
+command: jump 200 0 120 60 0 m2 m7
+response: ok
+start time: 2021-07-27 19:59:56.876000
+end_time: 2021-07-27 20:00:09.567000
+duration: 12.691
+
+id: 6
+command: jump 150 0 120 60 0 m7 m4
+response: ok
+start time: 2021-07-27 20:00:11.110000
+end_time: 2021-07-27 20:00:22.518000
+duration: 11.408
+
+id: 7
+command: land
+response: ok
+start time: 2021-07-27 20:00:22.561000
+end_time: 2021-07-27 20:00:26.749000
+duration: 4.188
+
+------
+Drone: 4
+
+id: 0
+command: command
+response: ok
+start time: 2021-07-27 19:59:43.564000
+end_time: 2021-07-27 19:59:43.879000
+duration: 0.315
+
+id: 1
+command: battery?
+response: 27
+
+start time: 2021-07-27 19:59:48.592000
+end_time: 2021-07-27 19:59:48.623000
+duration: 0.031
+
+id: 2
+command: sn?
+response: 0TQZH8LED00LG8
+start time: 2021-07-27 19:59:49.707000
+end_time: 2021-07-27 19:59:49.736000
+duration: 0.029
+
+id: 3
+command: mon
+response: ok
+start time: 2021-07-27 19:59:50.718000
+end_time: 2021-07-27 19:59:50.795000
+duration: 0.077
+
+id: 4
+command: takeoff
+response: ok
+start time: 2021-07-27 19:59:50.827000
+end_time: 2021-07-27 19:59:55.656000
+duration: 4.829
+
+id: 5
+command: jump 250 0 120 60 0 m1 m6
+response: ok
+start time: 2021-07-27 19:59:56.876000
+end_time: 2021-07-27 20:00:03.102000
+duration: 6.226
+
+id: 6
+command: jump 115 0 120 60 0 m6 m3
+response: ok
+start time: 2021-07-27 20:00:11.107000
+end_time: 2021-07-27 20:00:13.812000
+duration: 2.705
+
+id: 7
+command: land
+response: ok
+start time: 2021-07-27 20:00:22.559000
+end_time: 2021-07-27 20:00:26.919000
+duration: 4.36
+
+------
+Drone: 5
+
+id: 0
+command: command
+response: ok
+start time: 2021-07-27 19:59:43.564000
+end_time: 2021-07-27 19:59:43.884000
+duration: 0.32
+
+id: 1
+command: battery?
+response: 53
+
+start time: 2021-07-27 19:59:48.593000
+end_time: 2021-07-27 19:59:48.625000
+duration: 0.032
+
+id: 2
+command: sn?
+response: 0TQZJ75ED01NBB
+start time: 2021-07-27 19:59:49.727000
+end_time: 2021-07-27 19:59:49.762000
+duration: 0.035
+
+id: 3
+command: mon
+response: ok
+start time: 2021-07-27 19:59:50.720000
+end_time: 2021-07-27 19:59:50.825000
+duration: 0.105
+
+id: 4
+command: takeoff
+response: ok
+start time: 2021-07-27 19:59:50.841000
+end_time: 2021-07-27 19:59:56.833000
+duration: 5.992
+
+id: 5
+command: jump 210 0 120 60 0 m4 m1
+response: ok
+start time: 2021-07-27 19:59:56.881000
+end_time: 2021-07-27 20:00:11.011000
+duration: 14.13
+
+id: 6
+command: jump 210 0 120 60 0 m1 m6
+response: ok
+start time: 2021-07-27 20:00:11.113000
+end_time: 2021-07-27 20:00:16.621000
+duration: 5.508
+
+id: 7
+command: land
+response: ok
+start time: 2021-07-27 20:00:22.569000
+end_time: 2021-07-27 20:00:27.943000
+duration: 5.374
+

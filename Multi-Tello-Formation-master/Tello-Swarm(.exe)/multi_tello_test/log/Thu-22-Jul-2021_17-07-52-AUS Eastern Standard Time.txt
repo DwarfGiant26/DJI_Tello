@@ -1,0 +1,180 @@
+------
+Drone: 1
+
+id: 0
+command: command
+response: ok
+start time: 2021-07-22 17:07:52.565000
+end_time: 2021-07-22 17:07:52.905000
+duration: 0.34
+
+id: 1
+command: battery?
+response: 94
+
+start time: 2021-07-22 17:07:57.639000
+end_time: 2021-07-22 17:07:57.699000
+duration: 0.06
+
+id: 2
+command: sn?
+response: 0TQZH8LED00LEE
+start time: 2021-07-22 17:07:58.654000
+end_time: 2021-07-22 17:07:58.671000
+duration: 0.017
+
+id: 3
+command: mon
+response: ok
+start time: 2021-07-22 17:08:00.179000
+end_time: 2021-07-22 17:08:00.200000
+duration: 0.021
+
+id: 4
+command: takeoff
+response: ok
+start time: 2021-07-22 17:08:00.202000
+end_time: 2021-07-22 17:08:04.888000
+duration: 4.686
+
+id: 5
+command: jump 200 0 80 60 0 m2 m5
+response: error No valid marker
+start time: 2021-07-22 17:08:06.682000
+end_time: 2021-07-22 17:08:08.773000
+duration: 2.091
+
+id: 6
+command: jump 200 0 80 60 0 m5 m8
+response: error No valid marker
+start time: 2021-07-22 17:08:12.435000
+end_time: 2021-07-22 17:08:14.525000
+duration: 2.09
+
+id: 7
+command: land
+response: ok
+start time: 2021-07-22 17:08:19.717000
+end_time: 2021-07-22 17:08:22.380000
+duration: 2.663
+
+------
+Drone: 2
+
+id: 0
+command: command
+response: ok
+start time: 2021-07-22 17:07:52.565000
+end_time: 2021-07-22 17:07:52.902000
+duration: 0.337
+
+id: 1
+command: battery?
+response: 100
+
+start time: 2021-07-22 17:07:57.639000
+end_time: 2021-07-22 17:07:57.646000
+duration: 0.007
+
+id: 2
+command: sn?
+response: 0TQZH8LED00LG8
+start time: 2021-07-22 17:07:58.655000
+end_time: 2021-07-22 17:07:58.669000
+duration: 0.014
+
+id: 3
+command: mon
+response: ok
+start time: 2021-07-22 17:08:00.180000
+end_time: 2021-07-22 17:08:00.197000
+duration: 0.017
+
+id: 4
+command: takeoff
+response: ok
+start time: 2021-07-22 17:08:00.201000
+end_time: 2021-07-22 17:08:04.936000
+duration: 4.735
+
+id: 5
+command: jump 200 0 80 60 0 m1 m4
+response: ok
+start time: 2021-07-22 17:08:06.679000
+end_time: 2021-07-22 17:08:12.386000
+duration: 5.707
+
+id: 6
+command: jump 200 0 80 60 0 m4 m7
+response: error No valid marker
+start time: 2021-07-22 17:08:12.436000
+end_time: 2021-07-22 17:08:19.625000
+duration: 7.189
+
+id: 7
+command: land
+response: ok
+start time: 2021-07-22 17:08:19.715000
+end_time: 2021-07-22 17:08:23.143000
+duration: 3.428
+
+------
+Drone: 3
+
+id: 0
+command: command
+response: ok
+start time: 2021-07-22 17:07:52.565000
+end_time: 2021-07-22 17:07:52.897000
+duration: 0.332
+
+id: 1
+command: battery?
+response: 100
+
+start time: 2021-07-22 17:07:57.637000
+end_time: 2021-07-22 17:07:57.641000
+duration: 0.004
+
+id: 2
+command: sn?
+response: 0TQZH8LED00LGD
+start time: 2021-07-22 17:07:58.655000
+end_time: 2021-07-22 17:07:58.658000
+duration: 0.003
+
+id: 3
+command: mon
+response: ok
+start time: 2021-07-22 17:08:00.183000
+end_time: 2021-07-22 17:08:00.194000
+duration: 0.011
+
+id: 4
+command: takeoff
+response: ok
+start time: 2021-07-22 17:08:00.198000
+end_time: 2021-07-22 17:08:06.614000
+duration: 6.416
+
+id: 5
+command: jump 200 0 80 60 0 m3 m6
+response: error No valid marker
+start time: 2021-07-22 17:08:06.683000
+end_time: 2021-07-22 17:08:08.765000
+duration: 2.082
+
+id: 6
+command: jump 200 0 80 60 0 m6 m1
+response: error No valid marker
+start time: 2021-07-22 17:08:12.435000
+end_time: 2021-07-22 17:08:14.518000
+duration: 2.083
+
+id: 7
+command: land
+response: ok
+start time: 2021-07-22 17:08:19.716000
+end_time: 2021-07-22 17:08:23.190000
+duration: 3.474
+

@@ -1,0 +1,18 @@
+scan 5
+battery_check 10
+correct_ip
+1=0TQZH8LED00LG8
+2=0TQZH8LED00LGD
+3=0TQZJ75ED01P08
+4=0TQZJ75ED01NBB
+5=0TQZJ75ED01NN8
+*>mon
+*>takeoff
+sync 15
+1>jump 245 0 100 60 0 m1 m6
+2>jump 195 0 100 60 0 m2 m8
+3>jump 256 0 100 60 0 m3 m2
+4>jump 303 0 100 60 0 m4 m7
+5>jump 217 0 100 60 0 m5 m1
+sync 15
+*>land

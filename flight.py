@@ -48,15 +48,16 @@ def micro_adjustments(tello):
 # defining flights parameter
 # Column, Front, Echelon, Vee,Diamond.
 formation = "front"
-movement = "forward"
-wind_speed = 1
+movement = "hover"
+wind_speed = 0
+## speed 1: 5.4, speed 3: 8, speed 5: 12.5
 
-wind_direction = "cross_wind"
+wind_direction = "head_wind"
 if wind_speed == 0:
     wind_direction = "none"
 
-dist = 200
-hover_time = 5
+dist = 300
+hover_time = 10
 
 # ip: 192.168.0.11<drone number> 
 # defining the drones
@@ -72,11 +73,15 @@ swarm.parallel(lambda i,tello: tello.takeoff())
 swarm.parallel(lambda i,tello: tello.set_mission_pad_detection_direction(2))
 
 # fly
-# swarm.parallel(lambda i,tello: move_to_height(tello,70))
-swarm.parallel(lambda i,tello: tello.go_xyz_speed_mid(21,0,70,100,start[i]))
+swarm.parallel(lambda i,tello: tello.set_speed(20))
+swarm.parallel(lambda i,tello: tello.go_xyz_speed_mid(21,0,70,20,start[i]))
 swarm.parallel(lambda i,tello: tello.move("forward",dist))
-swarm.parallel(lambda i,tello: tello.go_xyz_speed_mid(21,0,70,100,dest[i]))
-# swarm.parallel(lambda i,tello: micro_adjustments(tello))
+swarm.parallel(lambda i,tello: tello.go_xyz_speed_mid(21,0,70,20,dest[i]))
+swarm.parallel(lambda i,tello: micro_adjustments(tello))
+
+## hover
+# swarm.parallel(lambda i,tello: tello.go_xyz_speed_mid(21,0,70,20,dest[i]))
+# time.sleep(hover_time)
 
 # end of flight
 swarm.parallel(lambda i,tello: tello.land())
@@ -96,4 +101,6 @@ parent_folder = os.path.join("dataset",formation,movement,f"wind_speed_{wind_spe
 for ip in ips:
     to_write = data[data.address == ip]
     to_write.to_csv(f"{parent_folder}/drone{ip[-1]}.csv")
+
+print(parent_folder)
 

@@ -47,45 +47,52 @@ def micro_adjustments(tello):
 
 # defining flights parameter
 # Column, Front, Echelon, Vee,Diamond.
-formation = "front"
+# column : 70cm between drone, 1 is the southest 5 is the northest
+
+formation = "column"
 movement = "hover"
-wind_speed = 0
+wind_speed = 3
 ## speed 1: 5.4, speed 3: 8, speed 5: 12.5
 
-wind_direction = "head_wind"
+wind_direction = "tail_wind"
 if wind_speed == 0:
     wind_direction = "none"
 
-dist = 300
-hover_time = 10
+dist = 100
+hover_time = 60
 
 # ip: 192.168.0.11<drone number> 
 # defining the drones
 ips = ["192.168.0.111","192.168.0.112","192.168.0.113","192.168.0.114","192.168.0.115"]
-start = [1,2,3,4,1]
-dest = [5,6,7,8,5]
+start = [1,2,3,4,5]
+# dest = [5,6,7,8,5]
 swarm = TelloSwarm.fromIps(ips)
 
 #beginning of flight
 swarm.parallel(lambda i,tello: tello.connect())
-swarm.parallel(lambda i,tello: tello.enable_mission_pads())
+# swarm.parallel(lambda i,tello: tello.enable_mission_pads())
 swarm.parallel(lambda i,tello: tello.takeoff())
-swarm.parallel(lambda i,tello: tello.set_mission_pad_detection_direction(2))
+# swarm.parallel(lambda i,tello: tello.set_mission_pad_detection_direction(2))
 
 # fly
-swarm.parallel(lambda i,tello: tello.set_speed(20))
-swarm.parallel(lambda i,tello: tello.go_xyz_speed_mid(21,0,70,20,start[i]))
-swarm.parallel(lambda i,tello: tello.move("forward",dist))
-swarm.parallel(lambda i,tello: tello.go_xyz_speed_mid(21,0,70,20,dest[i]))
-swarm.parallel(lambda i,tello: micro_adjustments(tello))
+# swarm.parallel(lambda i,tello: tello.set_speed(30))
+# swarm.parallel(lambda i,tello: tello.move("forward",dist))
+
+# swarm.parallel(lambda i,tello: tello.go_xyz_speed_mid(21,0,70,20,start[i]))
+# swarm.parallel(lambda i,tello: tello.go_xyz_speed_mid(21,0,70,20,dest[i]))
+# swarm.parallel(lambda i,tello: micro_adjustments(tello))
 
 ## hover
-# swarm.parallel(lambda i,tello: tello.go_xyz_speed_mid(21,0,70,20,dest[i]))
-# time.sleep(hover_time)
+for i in range(hover_time):
+    try:
+        swarm.parallel(lambda i,tello: tello.go_xyz_speed_mid(0,0,40,20,start[i]))
+    except:
+        pass
+    time.sleep(1)
 
 # end of flight
 swarm.parallel(lambda i,tello: tello.land())
-swarm.parallel(lambda i,tello: tello.disable_mission_pads())
+# swarm.parallel(lambda i,tello: tello.disable_mission_pads())
 swarm.parallel(lambda i, tello: tello.end())
 
 # post flight

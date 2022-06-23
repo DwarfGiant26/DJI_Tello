@@ -1,6 +1,7 @@
 import os
 
 # path: dataset/formation/movement/windspeed/winddirection
+os.mkdir('dataset')
 os.chdir('dataset')
 for i in ['column', 'front', 'echelon', 'vee', 'diamond']:
     os.mkdir(i)

@@ -9,7 +9,7 @@ def move_precisely(drone,flight_path,):
     # scan aruco from image
     id,position,orientation = get_info_aruco(frame)
     
-    #detect_markers_in_image(frame, draw_center=True, draw_reference_corner=True)
+    # detect_markers_in_image(frame, draw_center=True, draw_reference_corner=True)
     # translate relative position to relative position using standard measurement
     # translate relative position to global position
 

@@ -3,6 +3,7 @@ def adjust(expected_coor, global_coor):
 
 def get_info_aruco(frame):
     pass
+
 def move_precisely(drone,flight_path,):
     # get image
     frame = drone.get_frame_read()

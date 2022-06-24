@@ -1,12 +1,18 @@
 from xml.dom.expatbuilder import parseFragmentString
 import cv2
+from sqlalchemy import true
 import droneblocksutils.aruco_utils
 import math
 from droneblocksutils.aruco_utils import detect_markers_in_image
 import time
 from djitellopy import Tello,TelloSwarm,tello
 
-def default_velocity(instructions,time_lapsed):
+def default_velocity(instructions,time_lapsed, counter, velocity):
+    # given time that has passed return the velocity it should be at it if there is no inaccuracy
+    # We assume the counter starts at 0 moving forward, then 1 moving backward.
+    # if (counter%2 != 0):
+    #     velocity *= -1
+    # return velocity
     pass
 
 
@@ -35,7 +41,13 @@ def get_expected_completion_time(instructions,speed):
     time_to_complete = dist/speed
     return time_to_complete
 
-
+def check_if_path_complete(current_coordinates, instructions):
+    end_destination = instructions[1]
+    if (current_coordinates[0] >= end_destination[0]-3 and current_coordinates[0] <= end_destination[0]+3):
+        if (current_coordinates[1] >= end_destination[1] - 3 and current_coordinates[1] <= end_destination[1]+3):
+            return True
+    return False       
+    
 def get_expected_coor(instructions,time,speed):
     #Intakes current coordinates,speed, time elapsed, and start and end coordinates. Returns expected coordinates. 
     # instructions=[(start x, start y), (endx, endy]

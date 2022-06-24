@@ -9,18 +9,16 @@ from djitellopy import Tello,TelloSwarm,tello
 def default_velocity(instructions,time_lapsed):
     pass
 
-
-def adjust(drone,velocity,expected_coor, global_coor,frame_duration):
+def adjust(drone,default_speed,expected_coor, global_coor,frame_duration):
     to_adjust_left_right = expected_coor[0] - global_coor[0]
     to_adjust_forward_backward = expected_coor[1] - global_coor[1]
     additional_x_speed = to_adjust_forward_backward / frame_duration
     additional_y_speed = to_adjust_left_right / frame_duration
 
-    drone.send_rc_control(left_right_velocity = , \
-        forward_backward_velocity = 0, \
+    drone.send_rc_control(left_right_velocity = default_speed[0] + additional_y_speed, \
+        forward_backward_velocity = default_speed[1] + additional_x_speed, \
         up_down_velocity = 0, \
         yaw_velocity = 0)
-    pass
 
 def pixel_to_cm(rel_coor_pixel):
     # start position: (112, 119)
@@ -93,7 +91,8 @@ def move_precisely(drone,instructions,velocity):
         # todo: set an adjusts rate i.e. how many adjustments per seconds
         cur_time = time.perf_counter()
         # stop if the time is passed and we are reaching destination
-        if cur_time - start_time > expected_completion_time:
+        time_lapsed = cur_time - start_time
+        if time_lapsed > expected_completion_time:
             break
 
         # get image
@@ -110,6 +109,8 @@ def move_precisely(drone,instructions,velocity):
         # translate relative position to global position
         curr_global_coordinate = rel_coor_cm + get_marker_coordinate(id)
         expected_coordinate = get_expected_coor(instructions,time)
+        
+        default_speed = default_velocity(instructions,time_lapsed)
         # adjust based on the position and orientation
         adjust(drone,expected_coordinate,curr_global_coordinate)
 

@@ -23,7 +23,9 @@ def adjust(drone,velocity,expected_coor, global_coor,frame_duration):
     pass
 
 def pixel_to_cm(rel_coor_pixel):
-    pass
+    # start position: (112, 119)
+    x_dis = abs(rel_coor_pixel[0][0] - 112) * 5 / 17
+    y_dis = abs(rel_coor_pixel[0][1] - 119) * 5 / 17
 
 def get_expected_completion_time(instructions,time,speed):
     start_coord = instructions[0]

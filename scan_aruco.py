@@ -1,30 +1,35 @@
 import cv2
 import droneblocksutils.aruco_utils
+from droneblocksutils.aruco_utils import detect_markers_in_image
 
 # extern aruco_dict
 
 # global aruco_dict = cv2.aruco.dictionary_get(cv2.aruco.DICT_4x4_1000)
 
-def adjust(expected_coor, global_coor):
+def adjust(drone,expected_coor, global_coor):
     pass
 
-def get_info_aruco(frame):
+
+def pixel_to_cm(rel_coor_pixel):
     pass
 
-def move_precisely(drone,flight_path,):
+def get_expected_coor(instructions,time):
+
+def move_precisely(drone,flight_path,instructions):
 
     # get image
-    frame = drone.get_frame_read()
+    frame = drone.get_frame_read().frame
     # scan aruco from image
-    id,position,orientation = get_info_aruco(frame)
-    
     image, arr = detect_markers_in_image(frame, draw_center=True, draw_reference_corner=True)
+    if not len(arr) == 0:
+        rel_coor_pixel, id = arr[0]
 
     # translate relative position to relative position using standard measurement
+    rel_coor_cm = pixel_to_cm(rel_coor_pixel)
     # translate relative position to global position
-
+    curr_global_coordinate = rel_coor_cm + get_marker_coordinate(id)
     # adjust based on the position and orientation
-    adjust(expected_coordinate,global_coordinate)
+    adjust(drone,expected_coordinate,curr_global_coordinate)
 
 def get_marker_coordinate(id):
     dist_x = 30

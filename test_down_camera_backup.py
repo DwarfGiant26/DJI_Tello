@@ -2,6 +2,7 @@ from requests import get
 from djitellopy import Tello,TelloSwarm,tello
 import cv2
 from droneblocksutils.aruco_utils import detect_markers_in_image
+
 # from cv2 import aruco
 # ip: 192.168.0.11<drone number>
 # defining the drones

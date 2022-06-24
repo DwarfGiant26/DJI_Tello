@@ -11,7 +11,9 @@ def adjust(drone,expected_coor, global_coor):
     pass
 
 def pixel_to_cm(rel_coor_pixel):
-    pass
+    # start position: (112, 119)
+    x_dis = abs(rel_coor_pixel[0][0] - 112) * 5 / 17
+    y_dis = abs(rel_coor_pixel[0][1] - 119) * 5 / 17
 
 def get_expected_coor(instructions,time):
     pass

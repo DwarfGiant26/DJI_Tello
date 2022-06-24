@@ -23,9 +23,10 @@ def get_expected_completion_time(instructions,time,speed):
     return time_to_complete
 
 
-def get_expected_coor(instructions,time,curr_coordinates,speed):
+def get_expected_coor(instructions,time,speed):
     #Intakes current coordinates,speed, time elapsed, and start and end coordinates. Returns expected coordinates. 
     # instructions=[(start x, start y), (endx, endy]
+    # will need to adjust function depending on how time is tracked. 
     start_coord = instructions[0]
     end_coord = instructions[1]
     dist = Math.sqrt(((start_coord[0] - end_coord[0])**2) + ((start_coord[1] - end_coord[1])**2))
@@ -57,24 +58,6 @@ def get_expected_coor(instructions,time,curr_coordinates,speed):
 
 
 
-
-
-
-def move_precisely(drone,flight_path,instructions):
-
-    # get image
-    frame = drone.get_frame_read().frame
-    # scan aruco from image
-    image, arr = detect_markers_in_image(frame, draw_center=True, draw_reference_corner=True)
-    if not len(arr) == 0:
-        rel_coor_pixel, id = arr[0]
-
-    # translate relative position to relative position using standard measurement
-    rel_coor_cm = pixel_to_cm(rel_coor_pixel)
-    # translate relative position to global position
-    curr_global_coordinate = rel_coor_cm + get_marker_coordinate(id)
-    # adjust based on the position and orientation
-    adjust(drone,expected_coordinate,curr_global_coordinate)
 
 def get_marker_coordinate(id):
     dist_x = 30

@@ -16,3 +16,6 @@ def move_precisely(drone,flight_path,):
 
     # adjust based on the position and orientation
     adjust(expected_coordinate,global_coordinate)
+
+def get_marker_coordinate(id):
+    

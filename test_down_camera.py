@@ -5,7 +5,7 @@ from djitellopy import Tello,TelloSwarm,tello
 # from cv2 import aruco
 # ip: 192.168.0.11<drone number> 
 # defining the drones
-ips = ["192.168.0.111"]
+ips = ["192.168.0.113"]
 
 swarm = TelloSwarm.fromIps(ips)
 
@@ -21,6 +21,15 @@ while True:
 
 
 swarm.parallel(lambda i,tello: tello.streamoff())
+
+
+def pixel_to_cm(rel_coor_pixel):
+  x_pixel_distance = rel_coor_pixel[1][0] - rel_coor_pixel[0][0]
+  y_pixel_distance = rel_coor_pixel[1][1] - rel_coor_pixel[0][1]
+  x_real_distance = (x_pixel_distance) * 5 / 17
+  y_real_distance = (y_pixel_distance) * 5 / 17
+
+
 
 # post flight
 # retrieve log data

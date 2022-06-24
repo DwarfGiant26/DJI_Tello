@@ -5,8 +5,8 @@ from imutils.perspective import order_points
 import math
 
 # Setup the aruco marker detection
-aruco_dict = aruco.Dictionary_get(aruco.DICT_ARUCO_ORIGINAL)
-# aruco_dict = aruco.Dictionary_get(aruco.DICT_4X4_1000)
+# aruco_dict = aruco.Dictionary_get(aruco.DICT_ARUCO_ORIGINAL)
+aruco_dict = aruco.Dictionary_get(aruco.DICT_4X4_1000)
 
 aruco_params = aruco.DetectorParameters_create()
 

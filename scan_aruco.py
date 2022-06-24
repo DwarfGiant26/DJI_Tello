@@ -1,7 +1,7 @@
 from xml.dom.expatbuilder import parseFragmentString
 import cv2
-import Math
 import droneblocksutils.aruco_utils
+import math
 from droneblocksutils.aruco_utils import detect_markers_in_image
 import time
 from djitellopy import Tello,TelloSwarm,tello
@@ -25,10 +25,10 @@ def pixel_to_cm(rel_coor_pixel):
     x_dis = abs(rel_coor_pixel[0][0] - 112) * 5 / 17
     y_dis = abs(rel_coor_pixel[0][1] - 119) * 5 / 17
 
-def get_expected_completion_time(instructions,time,speed):
+def get_expected_completion_time(instructions,speed):
     start_coord = instructions[0]
     end_coord = instructions[1]
-    dist = Math.sqrt(((start_coord[0] - end_coord[0])**2) + ((start_coord[1] - end_coord[1])**2))
+    dist = math.sqrt(((start_coord[0] - end_coord[0])**2) + ((start_coord[1] - end_coord[1])**2))
     # Seconds to complete the entire distance:
     time_to_complete = dist/speed
     return time_to_complete
@@ -40,7 +40,7 @@ def get_expected_coor(instructions,time,speed):
     # will need to adjust function depending on how time is tracked. 
     start_coord = instructions[0]
     end_coord = instructions[1]
-    dist = Math.sqrt(((start_coord[0] - end_coord[0])**2) + ((start_coord[1] - end_coord[1])**2))
+    dist = math.sqrt(((start_coord[0] - end_coord[0])**2) + ((start_coord[1] - end_coord[1])**2))
     # Seconds to complete the entire distance:
     time_to_complete = dist/speed
     # What percentage of the journey should have been completed so far:

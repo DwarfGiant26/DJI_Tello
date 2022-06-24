@@ -14,6 +14,15 @@ def adjust(drone,expected_coor, global_coor):
 def pixel_to_cm(rel_coor_pixel):
     pass
 
+def get_expected_completion_time(instructions,time,speed):
+    start_coord = instructions[0]
+    end_coord = instructions[1]
+    dist = Math.sqrt(((start_coord[0] - end_coord[0])**2) + ((start_coord[1] - end_coord[1])**2))
+    # Seconds to complete the entire distance:
+    time_to_complete = dist/speed
+    return time_to_complete
+
+
 def get_expected_coor(instructions,time,curr_coordinates,speed):
     #Intakes current coordinates,speed, time elapsed, and which direction it should intake. Returns expected coordinates. 
     # instructions=[(start x, start y), (endx, endy)]

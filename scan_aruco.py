@@ -1,3 +1,4 @@
+from xml.dom.expatbuilder import parseFragmentString
 import cv2
 import Math
 import droneblocksutils.aruco_utils
@@ -55,10 +56,8 @@ def get_expected_coor(instructions,time,speed):
     expected_coord = (x_expected, y_expected)
     return expected_coord
 
-
-
-
-
+def get_rel_pos(center_from_drone):
+    parseFragmentString
 
 def get_marker_coordinate(id):
     dist_x = 30
@@ -93,7 +92,9 @@ def move_precisely(drone,instructions,velocity):
             rel_coor_pixel, id = arr[0]
 
         # translate relative position to relative position using standard measurement
-        rel_coor_cm = pixel_to_cm(rel_coor_pixel)
+        center_from_drone = pixel_to_cm(rel_coor_pixel)
+        rel_coor_cm = get_rel_pos(center_from_drone)
+        
         # translate relative position to global position
         curr_global_coordinate = rel_coor_cm + get_marker_coordinate(id)
         expected_coordinate = get_expected_coor(instructions,time)

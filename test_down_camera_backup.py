@@ -6,7 +6,7 @@ from droneblocksutils.aruco_utils import detect_markers_in_image
 # from cv2 import aruco
 # ip: 192.168.0.11<drone number>
 # defining the drones
-ips = ["192.168.0.111"]
+ips = ["192.168.0.113"]
 
 swarm = TelloSwarm.fromIps(ips)
 

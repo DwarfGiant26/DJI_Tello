@@ -66,12 +66,13 @@ def get_expected_coor(instructions,time,speed):
     return expected_coord
 
 def get_rel_pos(center_from_drone):
-    parseFragmentString
+    DRONE_CENTER_COOR = (112,119)
+    rel_coor = (center_from_drone[0]-DRONE_CENTER_COOR[0], center_from_drone[1]-DRONE_CENTER_COOR[1]) 
 
 def get_marker_coordinate(id):
-    dist_x = 30
-    dist_y = 30
-    row_len_in_markers = 3
+    dist_x = 28
+    dist_y = 23
+    row_len_in_markers = 5
     num_markers_from_0_x = id % row_len_in_markers
     num_markers_from_0_y = id // row_len_in_markers
 
@@ -84,11 +85,11 @@ def expected_completion_time(instructions,velocity):
     pass
 
 def move_precisely(drone,instructions,velocity):
+    FRAME_DURATION = 0.2
     start_time = time.perf_counter()
     expected_completion_time = expected_completion_time(instructions,velocity)
     
     while True:
-        # todo: set an adjusts rate i.e. how many adjustments per seconds
         cur_time = time.perf_counter()
         # stop if the time is passed and we are reaching destination
         time_lapsed = cur_time - start_time
@@ -113,6 +114,8 @@ def move_precisely(drone,instructions,velocity):
         default_speed = default_velocity(instructions,time_lapsed)
         # adjust based on the position and orientation
         adjust(drone,expected_coordinate,curr_global_coordinate)
+
+        time.sleep(FRAME_DURATION)
 
 
 if __name__ == "__main__":

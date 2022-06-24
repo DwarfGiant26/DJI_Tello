@@ -2,6 +2,7 @@ import cv2
 import droneblocksutils.aruco_utils
 from droneblocksutils.aruco_utils import detect_markers_in_image
 import time
+from djitellopy import Tello,TelloSwarm,tello
 
 # extern aruco_dict
 
@@ -25,6 +26,12 @@ def get_marker_coordinate(id):
 
     return(dist_x*num_markers_from_0_x, dist_y*num_markers_from_0_y)
 
+def is_reaching_destination(cur_coor):
+    pass
+
+def expected_completion_time(instructions,velocity):
+    pass
+
 def move_precisely(drone,instructions,velocity):
     start_time = time.perf_counter()
     expected_completion_time = expected_completion_time(instructions,velocity)
@@ -34,7 +41,7 @@ def move_precisely(drone,instructions,velocity):
         # stop if the time is passed and we are reaching destination
         if cur_time - start_time > expected_completion_time:
             break
-        
+
         # get image
         frame = drone.get_frame_read().frame
         # scan aruco from image
@@ -51,3 +58,21 @@ def move_precisely(drone,instructions,velocity):
         adjust(drone,expected_coordinate,curr_global_coordinate)
 
 
+if __name__ == "__main__":
+    ips = ["192.168.0.111"]
+
+    swarm = TelloSwarm.fromIps(ips)
+
+    #beginning of flight
+    swarm.parallel(lambda i,tello: tello.connect())
+    swarm.parallel(lambda i,tello: tello.streamon())
+    swarm.parallel(lambda i,tello: tello.send_control_command("downvision 1"))
+
+    instructions = [[((0,0),(100,100)),]] # instructions[droneid]
+    swarm.parallel(lambda i,tello: tello.takeoff())
+    swarm.parallel(lambda i,tello: move_precisely(tello,instructions[i],velocity=20))
+    swarm.parallel(lambda i,tello: tello.streamoff())
+
+    # end of flight
+    swarm.parallel(lambda i,tello: tello.land())
+    swarm.parallel(lambda i, tello: tello.end())

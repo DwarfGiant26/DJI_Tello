@@ -6,11 +6,20 @@ from droneblocksutils.aruco_utils import detect_markers_in_image
 import time
 from djitellopy import Tello,TelloSwarm,tello
 
-# extern aruco_dict
+def default_velocity(instructions,time_lapsed):
+    pass
 
-# global aruco_dict = cv2.aruco.dictionary_get(cv2.aruco.DICT_4x4_1000)
 
-def adjust(drone,expected_coor, global_coor):
+def adjust(drone,velocity,expected_coor, global_coor,frame_duration):
+    to_adjust_left_right = expected_coor[0] - global_coor[0]
+    to_adjust_forward_backward = expected_coor[1] - global_coor[1]
+    additional_x_speed = to_adjust_forward_backward / frame_duration
+    additional_y_speed = to_adjust_left_right / frame_duration
+
+    drone.send_rc_control(left_right_velocity = , \
+        forward_backward_velocity = 0, \
+        up_down_velocity = 0, \
+        yaw_velocity = 0)
     pass
 
 def pixel_to_cm(rel_coor_pixel):
@@ -79,6 +88,7 @@ def move_precisely(drone,instructions,velocity):
     expected_completion_time = expected_completion_time(instructions,velocity)
     
     while True:
+        # todo: set an adjusts rate i.e. how many adjustments per seconds
         cur_time = time.perf_counter()
         # stop if the time is passed and we are reaching destination
         if cur_time - start_time > expected_completion_time:

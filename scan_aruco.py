@@ -47,12 +47,23 @@ def get_expected_completion_time(instructions,speed):
     time_to_complete = dist/speed
     return time_to_complete
 
-def check_if_path_complete(current_coordinates, instructions):
-    end_destination = instructions[1]
-    if (current_coordinates[0] >= end_destination[0]-3 and current_coordinates[0] <= end_destination[0]+3):
-        if (current_coordinates[1] >= end_destination[1] - 3 and current_coordinates[1] <= end_destination[1]+3):
+
+
+def check_if_path_complete(current_coordinates, instructions, current_time):
+    start_coord = instructions[0]
+    end_coord = instructions[1]
+    time_to_complete = instructions[2]
+    # If drone is hovering:
+    if(start_coord[0] == end_coord[0] and start_coord[1] == end_coord[1]):
+        if current_time >= time_to_complete:
             return True
-    return False       
+    # Else drone is moving to a destination, check if the drones current location is near the desired destination.
+    else:
+        if (current_coordinates[0] >= end_coord[0]-3 and current_coordinates[0] <= end_coord[0]+3):
+            if (current_coordinates[1] >= end_coord[1] - 3 and current_coordinates[1] <= end_coord[1]+3):
+                return True
+    return False  
+    # instructions[droneid]. Format : [(start,destination,time_to_complete), ...]     
     
 def get_expected_coor(instructions,time_lapsed):
     #Intakes current coordinates,speed, time elapsed, and start and end coordinates. Returns expected coordinates. 

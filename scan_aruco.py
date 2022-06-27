@@ -5,8 +5,16 @@ from droneblocksutils.aruco_utils import detect_markers_in_image
 import time
 from djitellopy import Tello,TelloSwarm,tello
 
-def default_velocity(velocity,time_lapsed):
-    return velocity
+def default_velocity(instructions,time_lapsed):
+    instruction = instructions[0] 
+    start_coord = instruction[0]
+    end_coord = instruction[1]
+    time_to_complete = instruction[2]
+
+    x_velocity = (end_coord[0] - start_coord[0])/time_to_complete
+    y_velocity = (end_coord[0] - start_coord[0])/time_to_complete
+
+    return (x_velocity,y_velocity)
 
 def adjust(drone,default_speed,expected_coor, global_coor,frame_duration):
     # goal: try to adjust within 1 frame
@@ -60,25 +68,26 @@ def get_expected_coor(instructions,time_lapsed):
     dist = math.sqrt(((start_coord[0] - end_coord[0])**2) + ((start_coord[1] - end_coord[1])**2))
 
     portion_complete = (time_lapsed-instruction_start_time)/time_to_complete
-    # Total distance which should be travelled in the x plane so far:
-    x_travelled = portion_complete*(abs(start_coord[0] - end_coord[0])) 
-    # Total distance which should be travelled in the y plane so far:
-    y_travelled = portion_complete*(abs(start_coord[1] - end_coord[1]))
-    # If the drone needs to travel in increasing x coordinate values:
-    if(start_coord[0] < end_coord[0]):
-        x_expected = start_coord[0] + x_travelled
-    # Drone travels in decreasing y coordinate values. 
-    else:
-        x_expected = start_coord[0] - x_travelled
+    # # Total distance which should be travelled in the x plane so far:
+    # x_travelled = portion_complete*(abs(start_coord[0] - end_coord[0])) 
+    # # Total distance which should be travelled in the y plane so far:
+    # y_travelled = portion_complete*(abs(start_coord[1] - end_coord[1]))
+    # # If the drone needs to travel in increasing x coordinate values:
+    # if(start_coord[0] < end_coord[0]):
+    #     x_expected = start_coord[0] + x_travelled
+    # # Drone travels in decreasing y coordinate values. 
+    # else:
+    #     x_expected = start_coord[0] - x_travelled
 
-    # If the drone needs to travel in increasing y coordinate values:
-    if(start_coord[1] < end_coord[1]):
-        y_expected = start_coord[1] + y_travelled
-    # Drone travels in decreasing y coordinate values.
-    else:
-        y_expected = start_coord[1] - y_travelled
+    # # If the drone needs to travel in increasing y coordinate values:
+    # if(start_coord[1] < end_coord[1]):
+    #     y_expected = start_coord[1] + y_travelled
+    # # Drone travels in decreasing y coordinate values.
+    # else:velocity
+    #     y_expected = start_coord[1] - y_travelled
 
-    x_expected = portion_complete*end_coord[0] + (1-portion_complete)*start_coord
+    x_expected = portion_complete*end_coord[0] + (1-portion_complete)*start_coord[0]
+    y_expected = portion_complete*end_coord[1] + (1-portion_complete)*start_coord[1]
     expected_coord = (x_expected, y_expected)
     return expected_coord
 
@@ -104,21 +113,10 @@ def is_reaching_destination(cur_coor):
 def expected_completion_time(instructions,velocity):
     pass
 
-def move_precisely(drone,instructions,velocity):
+def move_precisely(drone,instructions):
     FRAME_DURATION = 0.2
     start_time = time.perf_counter()
     
-    # while True:
-    #     cap = drone.get_frame_read()
-    #     cv2.imshow('Frame', cap.frame)
-    #     if cv2.waitKey(25) & 0xFF == ord('q'):
-    #         break
-
-    #     image, arr = detect_markers_in_image(cap.frame, draw_center=True, draw_reference_corner=True)
-    #     if not len(arr) == 0:
-    #         center, id = arr[0]
-    #         print(id)
-    #         print(center)
     while True:
         cur_time = time.perf_counter()
         time_lapsed = cur_time - start_time
@@ -137,11 +135,11 @@ def move_precisely(drone,instructions,velocity):
         
         # translate relative position to global position
         curr_global_coordinate = rel_coor_cm + get_marker_coordinate(id)
-        default_speed = default_velocity(velocity,time_lapsed)
-        expected_coordinate = get_expected_coor(instructions,time_lapsed,velocity)
-        print(velocity)
+        default_speed = default_velocity(instructions,time_lapsed)
+        expected_coordinate = get_expected_coor(instructions,time_lapsed)
+        
         # adjust based on the position and orientation
-        adjust(drone,velocity,expected_coordinate,curr_global_coordinate,FRAME_DURATION)
+        adjust(drone,default_speed,expected_coordinate,curr_global_coordinate,FRAME_DURATION)
 
         if check_if_path_complete(curr_global_coordinate, instructions):
             break
@@ -161,9 +159,8 @@ if __name__ == "__main__":
     instructions = [[((0,0),(140,0),5),]] # instructions[droneid]. Format : [(start,destination,time_to_complete), ...]
     swarm.parallel(lambda i,tello: tello.takeoff())
     move_precisely(swarm.tellos[0],instructions[0],velocity=(20,0))
-    swarm.parallel(lambda i,tello: move_precisely(tello,instructions[i],velocity=(20,0)))
+    swarm.parallel(lambda i,tello: move_precisely(tello,instructions[i],))
 
-    time.sleep(10)
     swarm.parallel(lambda i,tello: tello.streamoff())
 
     # end of flight

@@ -7,13 +7,8 @@ from droneblocksutils.aruco_utils import detect_markers_in_image
 import time
 from djitellopy import Tello,TelloSwarm,tello
 
-def default_velocity(instructions,time_lapsed, counter, velocity):
-    # given time that has passed return the velocity it should be at it if there is no inaccuracy
-    # We assume the counter starts at 0 moving forward, then 1 moving backward.
-    # if (counter%2 != 0):
-    #     velocity *= -1
-    # return velocity
-    pass
+def default_velocity(velocity):
+    return velocity
 
 def adjust(drone,default_speed,expected_coor, global_coor,frame_duration):
     # goal: try to adjust within 1 frame

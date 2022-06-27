@@ -16,13 +16,18 @@ def default_velocity(instructions,time_lapsed, counter, velocity):
     pass
 
 def adjust(drone,default_speed,expected_coor, global_coor,frame_duration):
+    # goal: try to adjust within 1 frame
     to_adjust_left_right = expected_coor[0] - global_coor[0]
     to_adjust_forward_backward = expected_coor[1] - global_coor[1]
     additional_x_speed = to_adjust_forward_backward / frame_duration
     additional_y_speed = to_adjust_left_right / frame_duration
 
-    drone.send_rc_control(left_right_velocity = default_speed[0] + additional_y_speed, \
-        forward_backward_velocity = default_speed[1] + additional_x_speed, \
+    # make sure it is not going beyond the limit
+    new_left_right_speed = max(min(default_speed[0] + additional_y_speed,100),-100)
+    new_forward_backward_speed = max(min(default_speed[1] + additional_x_speed,100),-100)
+
+    drone.send_rc_control(left_right_velocity = new_left_right_speed, \
+        forward_backward_velocity = new_forward_backward_speed, \
         up_down_velocity = 0, \
         yaw_velocity = 0)
 
@@ -99,25 +104,21 @@ def expected_completion_time(instructions,velocity):
 def move_precisely(drone,instructions,velocity):
     FRAME_DURATION = 0.2
     start_time = time.perf_counter()
-    expected_completion_time = expected_completion_time(instructions,velocity)
     
     while True:
         cur_time = time.perf_counter()
-        # stop if the time is passed and we are reaching destination
         time_lapsed = cur_time - start_time
-        if time_lapsed > expected_completion_time:
-            break
 
         # get image
         frame = drone.get_frame_read().frame
         # scan aruco from image
         image, arr = detect_markers_in_image(frame, draw_center=True, draw_reference_corner=True)
         if not len(arr) == 0:
-            rel_coor_pixel, id = arr[0]
+            center_from_drone_pixel, id = arr[0]
 
         # translate relative position to relative position using standard measurement
-        center_from_drone = pixel_to_cm(rel_coor_pixel)
-        rel_coor_cm = get_rel_pos(center_from_drone)
+        center_from_drone_cm = pixel_to_cm(center_from_drone_pixel)
+        rel_coor_cm = get_rel_pos(center_from_drone_cm)
         
         # translate relative position to global position
         curr_global_coordinate = rel_coor_cm + get_marker_coordinate(id)
@@ -127,6 +128,8 @@ def move_precisely(drone,instructions,velocity):
         # adjust based on the position and orientation
         adjust(drone,expected_coordinate,curr_global_coordinate)
 
+        if check_if_path_complete(curr_global_coordinate, instructions):
+            break
         time.sleep(FRAME_DURATION)
 
 

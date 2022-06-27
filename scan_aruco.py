@@ -76,26 +76,7 @@ def get_expected_coor(instructions,time_lapsed):
     time_to_complete = instruction[2]
     instruction_start_time = 0 # change later so that it works with other instructions
 
-    dist = math.sqrt(((start_coord[0] - end_coord[0])**2) + ((start_coord[1] - end_coord[1])**2))
-
     portion_complete = (time_lapsed-instruction_start_time)/time_to_complete
-    # # Total distance which should be travelled in the x plane so far:
-    # x_travelled = portion_complete*(abs(start_coord[0] - end_coord[0])) 
-    # # Total distance which should be travelled in the y plane so far:
-    # y_travelled = portion_complete*(abs(start_coord[1] - end_coord[1]))
-    # # If the drone needs to travel in increasing x coordinate values:
-    # if(start_coord[0] < end_coord[0]):
-    #     x_expected = start_coord[0] + x_travelled
-    # # Drone travels in decreasing y coordinate values. 
-    # else:
-    #     x_expected = start_coord[0] - x_travelled
-
-    # # If the drone needs to travel in increasing y coordinate values:
-    # if(start_coord[1] < end_coord[1]):
-    #     y_expected = start_coord[1] + y_travelled
-    # # Drone travels in decreasing y coordinate values.
-    # else:velocity
-    #     y_expected = start_coord[1] - y_travelled
 
     x_expected = portion_complete*end_coord[0] + (1-portion_complete)*start_coord[0]
     y_expected = portion_complete*end_coord[1] + (1-portion_complete)*start_coord[1]

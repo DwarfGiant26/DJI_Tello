@@ -16,7 +16,7 @@ def default_velocity(instructions,time_lapsed):
 
     return (x_velocity,y_velocity)
 
-def adjust(drone,default_speed,expected_coor, global_coor,frame_duration):
+def adjust(drone,default_speed,expected_coor,global_coor,frame_duration):
     # goal: try to adjust within 1 frame
     to_adjust_left_right = expected_coor[0] - global_coor[0]
     to_adjust_forward_backward = expected_coor[1] - global_coor[1]

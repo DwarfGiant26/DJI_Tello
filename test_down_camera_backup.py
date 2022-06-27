@@ -6,7 +6,7 @@ from droneblocksutils.aruco_utils import detect_markers_in_image
 # from cv2 import aruco
 # ip: 192.168.0.11<drone number>
 # defining the drones
-ips = ["192.168.0.114"]
+ips = ["192.168.0.113"]
 
 swarm = TelloSwarm.fromIps(ips)
 
@@ -15,6 +15,8 @@ swarm.parallel(lambda i,tello: tello.connect())
 swarm.parallel(lambda i,tello: tello.streamon())
 swarm.parallel(lambda i,tello: tello.send_control_command("downvision 1"))
 cap = swarm.tellos[0].get_frame_read()
+import time
+
 while True:
   cap = swarm.tellos[0].get_frame_read()
   cv2.imshow('Frame', cap.frame)
@@ -26,6 +28,7 @@ while True:
     center, id = arr[0]
     print(id)
     print(center)
+  time.sleep(0.5)
 
 
 swarm.parallel(lambda i,tello: tello.streamoff())

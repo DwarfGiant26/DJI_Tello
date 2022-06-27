@@ -80,6 +80,20 @@ def get_expected_coor(instructions,time_lapsed):
 
     x_expected = portion_complete*end_coord[0] + (1-portion_complete)*start_coord[0]
     y_expected = portion_complete*end_coord[1] + (1-portion_complete)*start_coord[1]
+    # Setting boundary so expected coordinate does not go beyond intended destination. 
+    if end_coord[0] >= start_coord[0]:
+        if x_expected > end_coord[0]:
+            x_expected = end_coord[0]
+    else:
+        if x_expected < end_coord[0]:
+            x_expected = end_coord[0]
+    if end_coord[1] >= start_coord[1]:
+        if y_expected > end_coord[1]:
+            y_expected = end_coord[1]
+    else:
+        if y_expected < end_coord[1]:
+            y_expected = end_coord[1]
+
     expected_coord = (x_expected, y_expected)
     return expected_coord
 

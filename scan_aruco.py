@@ -46,7 +46,7 @@ def check_if_path_complete(current_coordinates, instructions):
             return True
     return False       
     
-def get_expected_coor(instructions,time_lapsed,speed):
+def get_expected_coor(instructions,time_lapsed):
     #Intakes current coordinates,speed, time elapsed, and start and end coordinates. Returns expected coordinates. 
     # instructions=[(start x, start y), (endx, endy]
     # will need to adjust function depending on how time is tracked.
@@ -54,11 +54,12 @@ def get_expected_coor(instructions,time_lapsed,speed):
     instruction = instructions[0] 
     start_coord = instruction[0]
     end_coord = instruction[1]
+    time_to_complete = instruction[2]
+    instruction_start_time = 0 # change later so that it works with other instructions
+
     dist = math.sqrt(((start_coord[0] - end_coord[0])**2) + ((start_coord[1] - end_coord[1])**2))
-    # Seconds to complete the entire distance:
-    time_to_complete = dist/speed
-    # What percentage of the journey should have been completed so far:
-    portion_complete = time_lapsed/time_to_complete
+
+    portion_complete = (time_lapsed-instruction_start_time)/time_to_complete
     # Total distance which should be travelled in the x plane so far:
     x_travelled = portion_complete*(abs(start_coord[0] - end_coord[0])) 
     # Total distance which should be travelled in the y plane so far:
@@ -76,6 +77,8 @@ def get_expected_coor(instructions,time_lapsed,speed):
     # Drone travels in decreasing y coordinate values.
     else:
         y_expected = start_coord[1] - y_travelled
+
+    x_expected = portion_complete*end_coord[0] + (1-portion_complete)*start_coord
     expected_coord = (x_expected, y_expected)
     return expected_coord
 
@@ -155,7 +158,7 @@ if __name__ == "__main__":
     swarm.parallel(lambda i,tello: tello.streamon())
     swarm.parallel(lambda i,tello: tello.send_control_command("downvision 1"))
 
-    instructions = [[((0,0),(140,0)),]] # instructions[droneid]
+    instructions = [[((0,0),(140,0),5),]] # instructions[droneid]. Format : [(start,destination,time_to_complete), ...]
     swarm.parallel(lambda i,tello: tello.takeoff())
     move_precisely(swarm.tellos[0],instructions[0],velocity=(20,0))
     swarm.parallel(lambda i,tello: move_precisely(tello,instructions[i],velocity=(20,0)))

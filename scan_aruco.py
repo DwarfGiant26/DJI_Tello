@@ -37,8 +37,8 @@ def adjust(drone,default_speed,expected_coor, global_coor,frame_duration):
 
 def pixel_to_cm(rel_coor_pixel):
     # start position: (112, 119)
-    x_dis = abs(rel_coor_pixel[0]) * 5 / 17
-    y_dis = abs(rel_coor_pixel[1]) * 5 / 17
+    x_dis = rel_coor_pixel[0] * 5 / 17
+    y_dis = rel_coor_pixel[1] * 5 / 17
 
     return (x_dis,y_dis)
 
@@ -113,21 +113,30 @@ def expected_completion_time(instructions,velocity):
 def get_global_coor(center_from_drone, marker_coordinate):
     return (center_from_drone[0]+marker_coordinate[0], center_from_drone[1]+marker_coordinate[1])
 
+def roll_based_correction(drone, curr_global_coordinate):
+    roll = math.radians(drone.get_roll())
+    height = drone.get_distance_tof()    
+    correction = math.tan(roll)* height
+    print(f"roll: {roll}, height: {height}, correction: {correction}")
+    return (curr_global_coordinate[0],curr_global_coordinate[1]+correction)
+
+
 def move_precisely(drone,instructions):
     FRAME_DURATION = 1
     start_time = time.perf_counter()
-    
+    next_frame_time = 0
     while True:
         print("-------------------------------------------------------------")
         print()
         print("-------------------------------------------------------------")
+        next_frame_time += FRAME_DURATION
         cur_time = time.perf_counter()
         time_lapsed = cur_time - start_time
         print(f"timestamp: {time_lapsed}")
-        
+
         # get image
         frame = drone.get_frame_read().frame
-
+        cv2.imshow("frame",frame)
         # scan aruco from image
         image, arr = detect_markers_in_image(frame, draw_center=True, draw_reference_corner=True)
         # print(time_lapsed)
@@ -142,9 +151,13 @@ def move_precisely(drone,instructions):
             
             # translate relative position to global position
             curr_global_coordinate = get_global_coor(center_from_drone_cm, get_marker_coordinate(id))
+            print(f"curr_global_coor_before: {curr_global_coordinate}")
+            curr_global_coordinate = roll_based_correction(drone,curr_global_coordinate)
+            print(f"curr_global_coor_after: {curr_global_coordinate}")
             default_speed = default_velocity(instructions,time_lapsed)
             expected_coordinate = get_expected_coor(instructions,time_lapsed)
             
+            # todo: readjust the yaw to the correct orientation
             # adjust based on the position and orientation
             adjust(drone,default_speed,expected_coordinate,curr_global_coordinate,FRAME_DURATION)
 
@@ -156,8 +169,10 @@ def move_precisely(drone,instructions):
                     up_down_velocity = 0, \
                     yaw_velocity = 0)
                 break
-
-        time.sleep(FRAME_DURATION)
+        
+        while time.perf_counter() - start_time < next_frame_time:
+            continue
+        # time.sleep(FRAME_DURATION)
 
 
 if __name__ == "__main__":
@@ -170,7 +185,7 @@ if __name__ == "__main__":
     swarm.parallel(lambda i,tello: tello.streamon())
     swarm.parallel(lambda i,tello: tello.send_control_command("downvision 1"))
 
-    instructions = [[((0,40),(40,40),30),]] # instructions[droneid]. Format : [(start,destination,time_to_complete), ...]
+    instructions = [[((0,40),(0,40),20),]] # instructions[droneid]. Format : [(start,destination,time_to_complete), ...]
     swarm.parallel(lambda i,tello: tello.takeoff())
     swarm.parallel(lambda i,tello: move_precisely(tello,instructions[i]))
 

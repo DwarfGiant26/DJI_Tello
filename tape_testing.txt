@@ -21,3 +21,45 @@ going forward
 10: 122,135
 20: 145,125
 30: 173,130
+
+
+todo today:
+- get the correct mapping between pixel and actual distance
+- try to correct the orientation
+- try to correct the height
+
+
+Mapping relation between height and conversion rate
+
+marker moving left to right
+100
+0: 255,139
+10: 254, 115 ->24
+20: 253, 91 -> 24
+30: 251, 66 -> 25
+40: 250,41 -> 25
+avg = 24.5
+
+85
+0: 254, 155
+10: 253, 127 -> 28
+20: 252, 98 -> 29
+30: 252, 71 -> 27
+40: 251, 42 -> 29
+avg = 28.25
+
+80
+0: 257, 156
+10: 256, 126 -> 30
+20: 255, 96 -> 30
+30: 253, 67 -> 29
+40: 252, 37 -> 30
+avg = 29.75
+
+65
+0: 281, 165
+10: 280, 130 -> 35
+20: 277, 91 -> 39
+30: 276, 56 -> 35
+40: 275, 
+avg = 36.3

@@ -85,15 +85,19 @@ def get_expected_coor(instructions,time_lapsed):
     x_expected = portion_complete*end_coord[0] + (1-portion_complete)*start_coord[0]
     y_expected = portion_complete*end_coord[1] + (1-portion_complete)*start_coord[1]
     # Setting boundary so expected coordinate does not go beyond intended destination. 
+    # If we are moving in increasing x direction
     if end_coord[0] >= start_coord[0]:
         if x_expected > end_coord[0]:
             x_expected = end_coord[0]
+    # If we are moving in decreasing x direction
     else:
         if x_expected < end_coord[0]:
             x_expected = end_coord[0]
+    # If we are moving in increasing y direction.
     if end_coord[1] >= start_coord[1]:
         if y_expected > end_coord[1]:
             y_expected = end_coord[1]
+    # If we are moving in decreasing y direction. 
     else:
         if y_expected < end_coord[1]:
             y_expected = end_coord[1]
@@ -134,6 +138,16 @@ def roll_based_correction(drone, curr_global_coordinate):
     print(f"roll: {roll}, height: {height}, correction: {correction}")
     return (curr_global_coordinate[0],curr_global_coordinate[1]+correction)
 
+# Function that tests if the drone is greater than 10cm away from where its supposed to be. 
+# Returns boolean indicating whether the drone should correct or not.
+def adjust_or_not(expected_coor, curr_global_coor):
+    if (abs(curr_global_coor[0]-expected_coor[0]) > 10):
+        return True
+    if (abs(curr_global_coor[1] - expected_coor[1]) > 10):
+        return True
+    return False
+
+
 
 def move_precisely(drone,instructions):
     FRAME_DURATION = 1
@@ -170,10 +184,12 @@ def move_precisely(drone,instructions):
             print(f"curr_global_coor_after: {curr_global_coordinate}")
             default_speed = default_velocity(instructions,time_lapsed)
             expected_coordinate = get_expected_coor(instructions,time_lapsed)
-            
+
+            # Checks to see if the drone is beyond 10cm from where it should be:
+            if (adjust_or_not(expected_coordinate,curr_global_coordinate)):
             # todo: readjust the yaw to the correct orientation
             # adjust based on the position and orientation
-            adjust(drone,default_speed,expected_coordinate,curr_global_coordinate,FRAME_DURATION)
+                adjust(drone,default_speed,expected_coordinate,curr_global_coordinate,FRAME_DURATION)
 
             if check_if_path_complete(curr_global_coordinate, instructions,time_lapsed):
                 print("complete")

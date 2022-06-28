@@ -4,6 +4,17 @@ import math
 from droneblocksutils.aruco_utils import detect_markers_in_image
 import time
 from djitellopy import Tello,TelloSwarm,tello
+from scipy.stats import linregress
+
+
+heights= [87, 72, 67, 55.5]
+rate = [40.33, 48.66, 52.33, 64]
+forward_backward_regression = linregress(heights, rate)
+heights= [100, 85, 80, 65]
+rate = [24.5, 28.25, 29.75, 36.333]
+left_right_regression = linregress(heights, rate)
+
+
 
 def default_velocity(instructions,time_lapsed):
     instruction = instructions[0] 
@@ -35,10 +46,12 @@ def adjust(drone,default_speed,expected_coor,global_coor,frame_duration):
         up_down_velocity = 0, \
         yaw_velocity = 0)
 
-def pixel_to_cm(rel_coor_pixel):
+def pixel_to_cm(rel_coor_pixel,height):
     # start position: (112, 119)
-    x_dis = rel_coor_pixel[0] * 5 / 17
-    y_dis = rel_coor_pixel[1] * 5 / 17
+    x_rate = forward_backward_regression.intercept + forward_backward_regression.slope * height
+    y_rate = left_right_regression.intercept + left_right_regression.slope * height
+    x_dis = rel_coor_pixel[0] * 10 / x_rate
+    y_dis = rel_coor_pixel[1] * 10 / y_rate
 
     return (x_dis,y_dis)
 

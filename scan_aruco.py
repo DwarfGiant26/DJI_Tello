@@ -168,6 +168,10 @@ def move_precisely(drone,instructions):
     start_time = time.perf_counter()
     next_frame_time = 0
     is_time_out = False
+    drone.send_rc_control(left_right_velocity = 0, \
+                    forward_backward_velocity = 0, \
+                    up_down_velocity = 0, \
+                    yaw_velocity = 0)
 
     while True:
         print("-------------------------------------------------------------")
@@ -244,7 +248,7 @@ def move_precisely(drone,instructions):
 
 
 if __name__ == "__main__":
-    ips = ["192.168.0.114"]
+    ips = ["192.168.0.112"]
 
     swarm = TelloSwarm.fromIps(ips)
 

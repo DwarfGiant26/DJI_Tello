@@ -29,7 +29,7 @@ while True:
     print(id)
     print(center)
   
-  time.sleep(0.5)
+  # time.sleep(0.5)
 
 
 swarm.parallel(lambda i,tello: tello.streamoff())

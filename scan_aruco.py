@@ -1,3 +1,4 @@
+from socket import timeout
 import cv2
 import droneblocksutils.aruco_utils
 import math
@@ -25,7 +26,7 @@ def default_velocity(instructions,time_lapsed):
     x_velocity = (end_coord[0] - start_coord[0])/time_to_complete
     y_velocity = (end_coord[1] - start_coord[1])/time_to_complete
     print(f"default velocity: {(x_velocity,y_velocity)}")
-    return (x_velocity,y_velocity)
+    return (int(x_velocity),int(y_velocity))
 
 def adjust(drone,default_speed,expected_coor,global_coor,frame_duration):
     # goal: try to adjust within 1 frame
@@ -148,7 +149,7 @@ def roll_based_correction(drone, curr_global_coordinate):
     roll = math.radians(drone.get_roll())
     height = drone.get_distance_tof()    
     correction = math.tan(roll)* height
-    print(f"roll: {roll}, height: {height}, correction: {correction}")
+    print(f"roll: {roll}, tof: {height}, height:{drone.get_height()}, correction: {correction}")
     return (curr_global_coordinate[0],curr_global_coordinate[1]+correction)
 
 # Function that tests if the drone is greater than 10cm away from where its supposed to be. 
@@ -166,10 +167,15 @@ def move_precisely(drone,instructions):
     FRAME_DURATION = 1
     start_time = time.perf_counter()
     next_frame_time = 0
+    is_time_out = False
+
     while True:
         print("-------------------------------------------------------------")
         print()
         print("-------------------------------------------------------------")
+
+        # Making sure that the drone is not turning off by making sure it always get a command
+        # drone.send_command_without_return("battery?")
         next_frame_time += FRAME_DURATION
         cur_time = time.perf_counter()
         time_lapsed = cur_time - start_time
@@ -187,7 +193,7 @@ def move_precisely(drone,instructions):
             # translate relative position to relative position using standard measurement
             rel_coor_cm = get_rel_pos(center_from_drone_pixel)
             print(f"relative coor {rel_coor_cm}")
-            center_from_drone_cm = pixel_to_cm(rel_coor_cm)
+            center_from_drone_cm = pixel_to_cm(rel_coor_cm,drone.get_distance_tof())
             print(f"center_from_drone_cm: {center_from_drone_cm}")
             
             # translate relative position to global position
@@ -203,6 +209,13 @@ def move_precisely(drone,instructions):
             # todo: readjust the yaw to the correct orientation
             # adjust based on the position and orientation
                 adjust(drone,default_speed,expected_coordinate,curr_global_coordinate,FRAME_DURATION)
+                is_time_out = True
+            else:
+                drone.send_rc_control(left_right_velocity = default_speed[1], \
+                    forward_backward_velocity = default_speed[0], \
+                    up_down_velocity = 0, \
+                    yaw_velocity = 0)
+        
 
             if check_if_path_complete(curr_global_coordinate, instructions,time_lapsed):
                 print("complete")
@@ -212,9 +225,21 @@ def move_precisely(drone,instructions):
                     up_down_velocity = 0, \
                     yaw_velocity = 0)
                 break
-        
+    
         while time.perf_counter() - start_time < next_frame_time:
             continue
+
+        # timeout
+        if is_time_out:
+            # make it go back to default speed
+            time.sleep(2)
+            default_speed = default_velocity(instructions,time_lapsed)
+            drone.send_rc_control(left_right_velocity = default_speed[1], \
+                    forward_backward_velocity = default_speed[0], \
+                    up_down_velocity = 0, \
+                    yaw_velocity = 0)
+            next_frame_time += 2
+        is_time_out = False
         # time.sleep(FRAME_DURATION)
 
 
@@ -227,8 +252,9 @@ if __name__ == "__main__":
     swarm.parallel(lambda i,tello: tello.connect())
     swarm.parallel(lambda i,tello: tello.streamon())
     swarm.parallel(lambda i,tello: tello.send_control_command("downvision 1"))
+    time.sleep(5)
 
-    instructions = [[((0,40),(0,40),20),]] # instructions[droneid]. Format : [(start,destination,time_to_complete), ...]
+    instructions = [[((0,240),(0,240),20),]] # instructions[droneid]. Format : [(start,destination,time_to_complete), ...]
     swarm.parallel(lambda i,tello: tello.takeoff())
     swarm.parallel(lambda i,tello: move_precisely(tello,instructions[i]))
 

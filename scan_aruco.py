@@ -232,12 +232,12 @@ def move_precisely(drone,instructions):
         # timeout
         if is_time_out:
             # make it go back to default speed
-            time.sleep(2)
             default_speed = default_velocity(instructions,time_lapsed)
             drone.send_rc_control(left_right_velocity = default_speed[1], \
                     forward_backward_velocity = default_speed[0], \
                     up_down_velocity = 0, \
                     yaw_velocity = 0)
+            time.sleep(2)
             next_frame_time += 2
         is_time_out = False
         # time.sleep(FRAME_DURATION)

@@ -16,7 +16,7 @@ def default_velocity(instructions,time_lapsed):
     print(f"default velocity: {(x_velocity,y_velocity)}")
     return (x_velocity,y_velocity)
 
-def adjust(drone,default_speed,expected_coor, global_coor,frame_duration):
+def adjust(drone,default_speed,expected_coor,global_coor,frame_duration):
     # goal: try to adjust within 1 frame
     to_adjust_left_right = expected_coor[1] - global_coor[1]
     to_adjust_forward_backward = expected_coor[0] - global_coor[0]
@@ -84,6 +84,20 @@ def get_expected_coor(instructions,time_lapsed):
 
     x_expected = portion_complete*end_coord[0] + (1-portion_complete)*start_coord[0]
     y_expected = portion_complete*end_coord[1] + (1-portion_complete)*start_coord[1]
+    # Setting boundary so expected coordinate does not go beyond intended destination. 
+    if end_coord[0] >= start_coord[0]:
+        if x_expected > end_coord[0]:
+            x_expected = end_coord[0]
+    else:
+        if x_expected < end_coord[0]:
+            x_expected = end_coord[0]
+    if end_coord[1] >= start_coord[1]:
+        if y_expected > end_coord[1]:
+            y_expected = end_coord[1]
+    else:
+        if y_expected < end_coord[1]:
+            y_expected = end_coord[1]
+
     expected_coord = (x_expected, y_expected)
     return expected_coord
 

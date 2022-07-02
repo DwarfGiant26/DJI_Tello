@@ -3,47 +3,7 @@ from djitellopy import Tello,TelloSwarm,tello
 import time
 import pandas as pd
 import math
-
-def move_to_height(tello,height):
-    cur_height = tello.get_state_field('z')
-    to_move = abs(height - cur_height)
-    to_move = 0 if to_move <= 10 else max(20,to_move)
-
-    if to_move >= 20:
-        if height - cur_height < 0:
-            tello.move("down",to_move)
-        else:
-            tello.move("up",to_move)
-
-def adjust_axis(axis, tello):
-    # check by how much the drone has to move
-    if axis == 'x':
-        diff = 21 - tello.get_state_field(axis)
-    else:
-        diff = 0 - tello.get_state_field(axis)
-    if abs(diff) <= 10:
-        to_move = 0
-    elif abs(diff) <= 20:
-        to_move = 20
-    else:
-        to_move = abs(diff)
-
-    # tello drone can only move at least 20 cm, so if we dont have to move it by that much we will not
-    if to_move >= 20:
-        if diff > 0:        
-            if axis == 'x':
-                tello.move("forward",to_move)
-            elif axis == 'y':
-                tello.move("left",to_move)
-        elif diff < 0:        
-            if axis == 'x':
-                tello.move("back",to_move)
-            elif axis == 'y':
-                tello.move("right",to_move)
-
-def micro_adjustments(tello):
-    adjust_axis('x',tello)
-    adjust_axis('y',tello)
+from adjustment import move_precisely
 
 # defining flights parameter
 # Column, Front, Echelon, Vee,Diamond.
@@ -51,7 +11,7 @@ def micro_adjustments(tello):
 
 formation = "column"
 movement = "hover"
-wind_speed = 3
+wind_speed = 0
 ## speed 1: 5.4, speed 3: 8, speed 5: 12.5
 
 wind_direction = "tail_wind"
@@ -64,35 +24,25 @@ hover_time = 60
 # ip: 192.168.0.11<drone number> 
 # defining the drones
 ips = ["192.168.0.111","192.168.0.112","192.168.0.113","192.168.0.114","192.168.0.115"]
-start = [1,2,3,4,5]
-# dest = [5,6,7,8,5]
+ips = ["192.168.0.103"]
 swarm = TelloSwarm.fromIps(ips)
 
 #beginning of flight
+swarm.parallel(lambda i,tello: tello.set_vs_port(f"1200{i-1}"))
 swarm.parallel(lambda i,tello: tello.connect())
-# swarm.parallel(lambda i,tello: tello.enable_mission_pads())
+swarm.parallel(lambda i,tello: tello.streamon())
+swarm.parallel(lambda i,tello: tello.send_control_command("downvision 1"))
+time.sleep(5)
+
+# instructions[droneid]. Format : [(start,destination,time_to_complete), ...]
+instructions = [[((40,160),(40,160),20)],[((110,160),(110,160),120)],[((180,160),(180,160),120)],[((250,160),(250,160),120)],[((320,160),(320,160),120)],] 
 swarm.parallel(lambda i,tello: tello.takeoff())
-# swarm.parallel(lambda i,tello: tello.set_mission_pad_detection_direction(2))
+swarm.parallel(lambda i,tello: move_precisely(tello,instructions[i]))
 
-# fly
-# swarm.parallel(lambda i,tello: tello.set_speed(30))
-# swarm.parallel(lambda i,tello: tello.move("forward",dist))
-
-# swarm.parallel(lambda i,tello: tello.go_xyz_speed_mid(21,0,70,20,start[i]))
-# swarm.parallel(lambda i,tello: tello.go_xyz_speed_mid(21,0,70,20,dest[i]))
-# swarm.parallel(lambda i,tello: micro_adjustments(tello))
-
-## hover
-for i in range(hover_time):
-    try:
-        swarm.parallel(lambda i,tello: tello.go_xyz_speed_mid(0,0,40,20,start[i]))
-    except:
-        pass
-    time.sleep(1)
+swarm.parallel(lambda i,tello: tello.streamoff())
 
 # end of flight
 swarm.parallel(lambda i,tello: tello.land())
-# swarm.parallel(lambda i,tello: tello.disable_mission_pads())
 swarm.parallel(lambda i, tello: tello.end())
 
 # post flight

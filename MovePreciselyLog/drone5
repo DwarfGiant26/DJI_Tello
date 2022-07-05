@@ -1,0 +1,109 @@
+start time: 20406.725478639
+-------------------------------------------------------------
+
+-------------------------------------------------------------
+timestamp: 0.0021878039988223463
+actual time: 20406.727666443
+center from drone: (250, 132), id: 74
+relative coor (138, 13)
+center_from_drone_cm: (32.874772746847555, 4.4008738375091765)
+Marker id: 74, coordinate: (280, 160)
+curr_global_coor_before: (312.87477274684755, 164.40087383750918)
+roll: 0.0, tof: 90, height:90, correction: 0.0
+curr_global_coor_after: (312.87477274684755, 164.40087383750918)
+default velocity: (0.0, 0.0)
+additional y speed: -5.0, to_adjust_left_right: -4.400873837509181, frame_duration: 1
+additional x speed: 7.0, to_adjust_forward_back: 7.125227253152445, frame_duration: 1
+expected_coor: (320.0, 160.0), global_coor: (312.87477274684755, 164.40087383750918)
+leftright: -5.0, forwardback: 7.0
+default velocity: (0.0, 0.0)
+-------------------------------------------------------------
+
+-------------------------------------------------------------
+timestamp: 3.008825158998661
+actual time: 20409.734303798
+center from drone: (242, 128), id: 74
+relative coor (130, 9)
+center_from_drone_cm: (30.968988819494072, 3.0467588105832757)
+Marker id: 74, coordinate: (280, 160)
+curr_global_coor_before: (310.9689888194941, 163.04675881058327)
+roll: 0.0, tof: 90, height:90, correction: 0.0
+curr_global_coor_after: (310.9689888194941, 163.04675881058327)
+default velocity: (0.0, 0.0)
+additional y speed: -4.0, to_adjust_left_right: -3.0467588105832704, frame_duration: 1
+additional x speed: 9.0, to_adjust_forward_back: 9.031011180505914, frame_duration: 1
+expected_coor: (320.0, 160.0), global_coor: (310.9689888194941, 163.04675881058327)
+leftright: -4.0, forwardback: 9.0
+default velocity: (0.0, 0.0)
+-------------------------------------------------------------
+
+-------------------------------------------------------------
+timestamp: 6.0000066089996835
+actual time: 20412.725485248
+center from drone: (230, 134), id: 74
+relative coor (118, 15)
+center_from_drone_cm: (27.622841190837118, 5.020599183744291)
+Marker id: 74, coordinate: (280, 160)
+curr_global_coor_before: (307.6228411908371, 165.02059918374428)
+roll: 0.0, tof: 90, height:90, correction: 0.0
+curr_global_coor_after: (307.6228411908371, 165.02059918374428)
+default velocity: (0.0, 0.0)
+additional y speed: -6.0, to_adjust_left_right: -5.020599183744281, frame_duration: 1
+additional x speed: 12.0, to_adjust_forward_back: 12.377158809162893, frame_duration: 1
+expected_coor: (320.0, 160.0), global_coor: (307.6228411908371, 165.02059918374428)
+leftright: -6.0, forwardback: 12.0
+default velocity: (0.0, 0.0)
+-------------------------------------------------------------
+
+-------------------------------------------------------------
+timestamp: 9.0027866370001
+actual time: 20415.728265276
+center from drone: (228, 131), id: 74
+relative coor (116, 12)
+center_from_drone_cm: (27.154657441839877, 4.016479346995433)
+Marker id: 74, coordinate: (280, 160)
+curr_global_coor_before: (307.1546574418399, 164.01647934699542)
+roll: 0.0, tof: 80, height:80, correction: 0.0
+curr_global_coor_after: (307.1546574418399, 164.01647934699542)
+default velocity: (0.0, 0.0)
+additional y speed: -5.0, to_adjust_left_right: -4.016479346995425, frame_duration: 1
+additional x speed: 12.0, to_adjust_forward_back: 12.845342558160098, frame_duration: 1
+expected_coor: (320.0, 160.0), global_coor: (307.1546574418399, 164.01647934699542)
+leftright: -5.0, forwardback: 12.0
+default velocity: (0.0, 0.0)
+-------------------------------------------------------------
+
+-------------------------------------------------------------
+timestamp: 12.001276742998016
+actual time: 20418.726755382
+center from drone: (231, 127), id: 74
+relative coor (119, 8)
+center_from_drone_cm: (27.856933065335735, 2.677652897996955)
+Marker id: 74, coordinate: (280, 160)
+curr_global_coor_before: (307.85693306533574, 162.67765289799695)
+roll: 0.0, tof: 80, height:80, correction: 0.0
+curr_global_coor_after: (307.85693306533574, 162.67765289799695)
+default velocity: (0.0, 0.0)
+additional y speed: -3.0, to_adjust_left_right: -2.67765289799695, frame_duration: 1
+additional x speed: 12.0, to_adjust_forward_back: 12.143066934664262, frame_duration: 1
+expected_coor: (320.0, 160.0), global_coor: (307.85693306533574, 162.67765289799695)
+leftright: -3.0, forwardback: 12.0
+default velocity: (0.0, 0.0)
+-------------------------------------------------------------
+
+-------------------------------------------------------------
+timestamp: 15.003137824998703
+actual time: 20421.728616464
+center from drone: (240, 133), id: 74
+relative coor (128, 14)
+center_from_drone_cm: (30.4925428376557, 4.7394025942406515)
+Marker id: 74, coordinate: (280, 160)
+curr_global_coor_before: (310.4925428376557, 164.73940259424066)
+roll: 0.0, tof: 80, height:80, correction: 0.0
+curr_global_coor_after: (310.4925428376557, 164.73940259424066)
+default velocity: (0.0, 0.0)
+additional y speed: -5.0, to_adjust_left_right: -4.739402594240659, frame_duration: 1
+additional x speed: 9.0, to_adjust_forward_back: 9.50745716234428, frame_duration: 1
+expected_coor: (320.0, 160.0), global_coor: (310.4925428376557, 164.73940259424066)
+leftright: -5.0, forwardback: 9.0
+complete

@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
         
         // forward the message to localhost:destination port
         // destination_addr.sin_port = destination_ports[0];
-        destination_addr.sin_port = htons((uint16_t) atoi(destination_ports[0]));
+        destination_addr.sin_port = htons((uint16_t) atoi(destination_ports[port_index]));
         
         sendto(sock, buf, (size_t) n, 0, (struct sockaddr *) &destination_addr, sizeof(destination_addr));
         

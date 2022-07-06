@@ -47,6 +47,7 @@ def adjust(drone,default_speed,expected_coor,global_coor,frame_duration,log_file
             up_down_velocity = 0, \
             yaw_velocity = 0)
 
+
 def pixel_to_cm(rel_coor_pixel,height):
     # start position: (112, 119)
     x_rate = forward_backward_regression.intercept + forward_backward_regression.slope * height
@@ -88,7 +89,7 @@ def get_expected_coor(instructions,time_lapsed):
     # instructions=[(start x, start y), (endx, endy]
     # will need to adjust function depending on how time is tracked.
 
-    instruction = instructions[0] 
+    instruction = instructions[0] # todo: change so that it works with multiple instructions
     start_coord = instruction[0]
     end_coord = instruction[1]
     time_to_complete = instruction[2]
@@ -98,6 +99,8 @@ def get_expected_coor(instructions,time_lapsed):
 
     x_expected = portion_complete*end_coord[0] + (1-portion_complete)*start_coord[0]
     y_expected = portion_complete*end_coord[1] + (1-portion_complete)*start_coord[1]
+    z_expected = portion_complete*end_coord[2] + (1-portion_complete)*start_coord[2]
+    
     # Setting boundary so expected coordinate does not go beyond intended destination. 
     # If we are moving in increasing x direction
     if end_coord[0] >= start_coord[0]:
@@ -107,6 +110,7 @@ def get_expected_coor(instructions,time_lapsed):
     else:
         if x_expected < end_coord[0]:
             x_expected = end_coord[0]
+
     # If we are moving in increasing y direction.
     if end_coord[1] >= start_coord[1]:
         if y_expected > end_coord[1]:
@@ -115,8 +119,17 @@ def get_expected_coor(instructions,time_lapsed):
     else:
         if y_expected < end_coord[1]:
             y_expected = end_coord[1]
+    
+    # If we are moving in increasing z direction.
+    if end_coord[2] >= start_coord[2]:
+        if z_expected > end_coord[2]:
+            z_expected = end_coord[2]
+    # If we are moving in decreasing z direction. 
+    else:
+        if z_expected < end_coord[2]:
+            z_expected = end_coord[2]
 
-    expected_coord = (x_expected, y_expected)
+    expected_coord = (x_expected, y_expected, z_expected)
     return expected_coord
 
 def set_background_frame(drone):
@@ -210,6 +223,7 @@ def move_precisely(drone, instructions, log_file):
             # translate relative position to global position
             curr_global_coordinate = get_global_coor(center_from_drone_cm, get_marker_coordinate(id,log_file))
             curr_global_coordinate = roll_based_correction(drone,curr_global_coordinate,log_file)
+            curr_global_coordinate += (drone.get_height(),) # adding height to the current global coordinate
             default_speed = default_velocity(instructions,time_lapsed,log_file)
             expected_coordinate = get_expected_coor(instructions,time_lapsed)
             update_logfile_position(log_file, center_from_drone_pixel, rel_coor_cm, center_from_drone_cm, curr_global_coordinate)

@@ -35,8 +35,9 @@ swarm.parallel(lambda i,tello: tello.send_control_command("downvision 1"))
 time.sleep(5)
 
 # instructions[droneid]. Format : [(start,destination,time_to_complete), ...]
-instructions = [[((40,160),(40,160),hover_time)],[((110,160),(110,160),hover_time)],[((180,160),(180,160),hover_time)],[((250,160),(250,160),hover_time)],[((320,160),(320,160),hover_time)],] 
-height_instructions = [(80,)] # (destination,time_to_complete)
+# instructions = [[((40,160,80),(40,160,80),hover_time)],[((110,160),(110,160),hover_time)],[((180,160),(180,160),hover_time)],[((250,160),(250,160),hover_time)],[((320,160),(320,160),hover_time)],] 
+instructions = [[((40,160,80),(40,160,80),hover_time),((40,160,80),(40,160,100),100)]]
+
 swarm.parallel(lambda i,tello: tello.takeoff())
 swarm.parallel(lambda i,tello: move_precisely(tello,instructions[i],open(os.path.join("MovePreciselyLog",f"drone{i+1}"),"w")))
 

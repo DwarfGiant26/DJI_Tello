@@ -19,15 +19,17 @@ wind_direction = "tail_wind"
 if wind_speed == 0:
     wind_direction = "none"
 
-hover_time = 15
+hover_time = 10
 
 # ip: 192.168.0.11<drone number> 
 # defining the drones
 ips = ["192.168.0.111","192.168.0.112","192.168.0.113","192.168.0.114","192.168.0.115"]
+ips = ["192.168.0.114"]
 swarm = TelloSwarm.fromIps(ips)
 
 #beginning of flight
 swarm.parallel(lambda i,tello: tello.set_vs_port(f"1400{i+1}"))
+swarm.parallel(lambda i,tello: tello.set_vs_port(f"14004")) # testing drone 4
 swarm.parallel(lambda i,tello: tello.connect())
 swarm.parallel(lambda i,tello: tello.streamon())
 swarm.parallel(lambda i,tello: set_background_frame(tello))
@@ -36,7 +38,7 @@ time.sleep(5)
 
 # instructions[droneid]. Format : [(start,destination,time_to_complete), ...]
 # instructions = [[((40,160,80),(40,160,80),hover_time)],[((110,160),(110,160),hover_time)],[((180,160),(180,160),hover_time)],[((250,160),(250,160),hover_time)],[((320,160),(320,160),hover_time)],] 
-instructions = [[((40,160,80),(40,160,80),hover_time),((40,160,80),(40,160,100),100)]]
+instructions = [[((160,160,30),(160,160,30),hover_time),((160,160,30),(160,160,100),5)]]
 
 swarm.parallel(lambda i,tello: tello.takeoff())
 swarm.parallel(lambda i,tello: move_precisely(tello,instructions[i],open(os.path.join("MovePreciselyLog",f"drone{i+1}"),"w")))

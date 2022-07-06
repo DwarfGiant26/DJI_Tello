@@ -15,8 +15,8 @@ left_right_regression = linregress(heights, rate)
 MARGIN_OF_ERROR = 5
 
 
-def default_velocity(instructions,time_lapsed,log_file):
-    instruction = instructions[0] 
+def default_velocity(instruction,time_lapsed,log_file):
+
     start_coord = instruction[0]
     end_coord = instruction[1]
     time_to_complete = instruction[2]
@@ -32,21 +32,28 @@ def adjust(drone,default_speed,expected_coor,global_coor,frame_duration,log_file
     # goal: try to adjust within 1 frame
     to_adjust_left_right = expected_coor[1] - global_coor[1]
     to_adjust_forward_backward = expected_coor[0] - global_coor[0]
+    to_adjust_up_down = expected_coor[2] - global_coor[2]
+
     additional_x_speed = to_adjust_forward_backward // frame_duration
     additional_y_speed = to_adjust_left_right // frame_duration
+    additional_z_speed = to_adjust_up_down // frame_duration
+
     log_file.write(f"additional y speed: {additional_y_speed}, to_adjust_left_right: {to_adjust_left_right}, frame_duration: {frame_duration}\n")
     log_file.write(f"additional x speed: {additional_x_speed}, to_adjust_forward_back: {to_adjust_forward_backward}, frame_duration: {frame_duration}\n")
 
     # make sure it is not going beyond the limit
     new_left_right_speed = max(min(default_speed[1] + additional_y_speed,100),-100)
     new_forward_backward_speed = max(min(default_speed[0] + additional_x_speed,100),-100)
+    new_up_down_speed = max(min(default_speed[2] + additional_z_speed,100),-100)
+
     log_file.write(f"expected_coor: {expected_coor}, global_coor: {global_coor}\n")
-    log_file.write(f"leftright: {new_left_right_speed}, forwardback: {new_forward_backward_speed}\n")
+    log_file.write(f"leftright: {new_left_right_speed}, forwardback: {new_forward_backward_speed}, updown: {new_up_down_speed}\n")
+    
     
     for i in range(3):
         drone.send_rc_control(left_right_velocity = int(new_left_right_speed), \
             forward_backward_velocity = int(new_forward_backward_speed), \
-            up_down_velocity = 0, \
+            up_down_velocity = int(new_up_down_speed), \
             yaw_velocity = 0)
 
 
@@ -59,16 +66,16 @@ def pixel_to_cm(rel_coor_pixel,height):
 
     return (x_dis,y_dis)
 
-def get_expected_completion_time(instructions,speed):
-    start_coord = instructions[0]
-    end_coord = instructions[1]
+def get_expected_completion_time(instruction,speed):
+    start_coord = instruction[0]
+    end_coord = instruction[1]
     dist = math.sqrt(((start_coord[0] - end_coord[0])**2) + ((start_coord[1] - end_coord[1])**2))
     # Seconds to complete the entire distance:
     time_to_complete = dist/speed
     return time_to_complete
 
-def check_if_path_complete(current_coordinates, instructions, current_time,log_file):
-    instruction = instructions[0]
+def check_if_path_complete(current_coordinates, instruction, current_time,log_file):
+
     start_coord = instruction[0]
     end_coord = instruction[1]
     time_to_complete = instruction[2]
@@ -89,12 +96,11 @@ def check_if_path_complete(current_coordinates, instructions, current_time,log_f
     return False  
     # instructions[droneid]. Format : [(start,destination,time_to_complete), ...]     
     
-def get_expected_coor(instructions,time_lapsed):
+def get_expected_coor(instruction,time_lapsed):
     #Intakes current coordinates,speed, time elapsed, and start and end coordinates. Returns expected coordinates. 
     # instructions=[(start x, start y), (endx, endy]
     # will need to adjust function depending on how time is tracked.
 
-    instruction = instructions[0] # todo: change so that it works with multiple instructions
     start_coord = instruction[0]
     end_coord = instruction[1]
     time_to_complete = instruction[2]
@@ -180,6 +186,8 @@ def adjust_or_not(expected_coor, curr_global_coor):
         return True
     if (abs(curr_global_coor[1] - expected_coor[1]) > MARGIN_OF_ERROR):
         return True
+    if (abs(curr_global_coor[2] - expected_coor[2]) > MARGIN_OF_ERROR):
+        return True
     return False
 
 
@@ -200,80 +208,85 @@ def update_logfile_position(log_file, center_from_drone_pixel, rel_coor_cm, cent
 def move_precisely(drone, instructions, log_file):
     FRAME_DURATION = 1
     
-    start_time = time.perf_counter()
-    log_file.write(f"start time: {start_time}\n")
-    print(f"start counter, drone ip: {drone.address[0]}")
-    next_frame_time = 0
-    is_time_out = False
-    drone.send_rc_control(left_right_velocity = 0, \
-                    forward_backward_velocity = 0, \
-                    up_down_velocity = 0, \
-                    yaw_velocity = 0)
+    # iterate through all instructions
+    for instruction in instructions:
 
-    while True:
-        next_frame_time += FRAME_DURATION
-        cur_time = time.perf_counter()
-        time_lapsed = get_lapsed_time(next_frame_time, start_time, log_file)
+        start_time = time.perf_counter()
+        log_file.write(f"start time: {start_time}\n")
+        print(f"start counter, drone ip: {drone.address[0]}")
+        next_frame_time = 0
+        is_time_out = False
+        drone.send_rc_control(left_right_velocity = 0, \
+                        forward_backward_velocity = 0, \
+                        up_down_velocity = 0, \
+                        yaw_velocity = 0)
 
-        # get image
-        frame = drone.background_frame_read.frame
-        # scan aruco from image
-        image, arr = detect_markers_in_image(frame, draw_center=True, draw_reference_corner=True)
-        
-        if not len(arr) == 0: # if the drone fails to detect any aruco the array will be empty
-            center_from_drone_pixel, id = arr[0]
-            # translate relative position to relative position using standard measurement
-            rel_coor_cm = get_rel_pos(center_from_drone_pixel)
-            center_from_drone_cm = pixel_to_cm(rel_coor_cm,drone.get_distance_tof())
+        while True:
+            next_frame_time += FRAME_DURATION
+            cur_time = time.perf_counter()
+            time_lapsed = get_lapsed_time(log_file, start_time, cur_time)
+
+            # get image
+            frame = drone.background_frame_read.frame
+            # scan aruco from image
+            image, arr = detect_markers_in_image(frame, draw_center=True, draw_reference_corner=True)
             
-            # translate relative position to global position
-            curr_global_coordinate = get_global_coor(center_from_drone_cm, get_marker_coordinate(id,log_file))
-            curr_global_coordinate = roll_based_correction(drone,curr_global_coordinate,log_file)
-            curr_global_coordinate += (drone.get_height(),) # adding height to the current global coordinate
-            default_speed = default_velocity(instructions,time_lapsed,log_file)
-            expected_coordinate = get_expected_coor(instructions,time_lapsed)
-            update_logfile_position(log_file, center_from_drone_pixel, rel_coor_cm, center_from_drone_cm, curr_global_coordinate)
+            if not len(arr) == 0: # if the drone fails to detect any aruco the array will be empty
+                center_from_drone_pixel, id = arr[0]
+                # translate relative position to relative position using standard measurement
+                rel_coor_cm = get_rel_pos(center_from_drone_pixel)
+                center_from_drone_cm = pixel_to_cm(rel_coor_cm,drone.get_height())
+                
+                # translate relative position to global position
+                curr_global_coordinate = get_global_coor(center_from_drone_cm, get_marker_coordinate(id,log_file))
+                curr_global_coordinate = roll_based_correction(drone,curr_global_coordinate,log_file)
+                print(f"before {curr_global_coordinate}")
+                curr_global_coordinate = (curr_global_coordinate[0], curr_global_coordinate[1], drone.get_height(),) # adding height to the current global coordinate
+                print(f"after {curr_global_coordinate}")
+                default_speed = default_velocity(instruction,time_lapsed,log_file)
+                expected_coordinate = get_expected_coor(instruction,time_lapsed)
+                update_logfile_position(log_file, center_from_drone_pixel, rel_coor_cm, center_from_drone_cm, curr_global_coordinate)
 
-            # Checks to see if the drone is beyond 10cm from where it should be:
-            if (adjust_or_not(expected_coordinate,curr_global_coordinate)):
-                adjust(drone,default_speed,expected_coordinate,curr_global_coordinate,FRAME_DURATION,log_file)
-                is_time_out = True
-            else:
-                drone.send_rc_control(left_right_velocity = default_speed[1], \
-                    forward_backward_velocity = default_speed[0], \
-                    up_down_velocity = 0, \
-                    yaw_velocity = 0)
-        
-
-            if check_if_path_complete(curr_global_coordinate, instructions, time_lapsed, log_file):
-                log_file.write("complete\n")
-                print("complete")
-                # tell it to stop
-                drone.send_rc_control(left_right_velocity = 0, \
-                    forward_backward_velocity = 0, \
-                    up_down_velocity = 0, \
-                    yaw_velocity = 0)
-                break
-        
-        log_file.flush()
-
-        while time.perf_counter() - start_time < next_frame_time:
-            continue
-
-        # timeout
-        if is_time_out:
-            # make it go back to default speed
-            default_speed = default_velocity(instructions,time_lapsed,log_file)
-            drone.send_rc_control(left_right_velocity = default_speed[1], \
-                    forward_backward_velocity = default_speed[0], \
-                    up_down_velocity = 0, \
-                    yaw_velocity = 0)
+                # Checks to see if the drone is beyond 10cm from where it should be:
+                if (adjust_or_not(expected_coordinate,curr_global_coordinate)):
+                    adjust(drone,default_speed,expected_coordinate,curr_global_coordinate,FRAME_DURATION,log_file)
+                    is_time_out = True
+                else:
+                    drone.send_rc_control(left_right_velocity = default_speed[1], \
+                        forward_backward_velocity = default_speed[0], \
+                        up_down_velocity = 0, \
+                        yaw_velocity = 0)
             
-            next_frame_time += FRAME_DURATION*2
+
+                if check_if_path_complete(curr_global_coordinate, instruction, time_lapsed, log_file):
+                    log_file.write("complete\n")
+                    print("complete")
+                    # tell it to stop
+                    drone.send_rc_control(left_right_velocity = 0, \
+                        forward_backward_velocity = 0, \
+                        up_down_velocity = 0, \
+                        yaw_velocity = 0)
+                    break
+            
+            log_file.flush()
+
             while time.perf_counter() - start_time < next_frame_time:
                 continue
-        is_time_out = False
-        # time.sleep(FRAME_DURATION)
+
+            # timeout
+            if is_time_out:
+                # make it go back to default speed
+                default_speed = default_velocity(instruction,time_lapsed,log_file)
+                drone.send_rc_control(left_right_velocity = default_speed[1], \
+                        forward_backward_velocity = default_speed[0], \
+                        up_down_velocity = 0, \
+                        yaw_velocity = 0)
+                
+                next_frame_time += FRAME_DURATION*2
+                while time.perf_counter() - start_time < next_frame_time:
+                    continue
+            is_time_out = False
+            # time.sleep(FRAME_DURATION)
     log_file.close()
 
 

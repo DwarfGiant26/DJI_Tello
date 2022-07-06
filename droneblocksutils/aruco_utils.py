@@ -94,7 +94,7 @@ def detect_markers_in_image(image, draw_reference_corner=True, draw_center=True,
     :type target_id:
     :param draw_target_id: Flag to indicate whether the id should be added to the image.  Default - True
     :type bool:
-    :param draw_border: Flag too indicate whether to draw the border around the marker. Defauilt - True
+    :param draw_border: Flag too indicate whether to draw the border around the marker. Default - True
     :type bool:
     :return: image with all found markers highlighted, center dot, ID number added,
                 List for each Marker found. The list contains a tuple of the form: ((center_x,center_y),point_id)

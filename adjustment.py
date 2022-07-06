@@ -1,6 +1,3 @@
-from socket import timeout
-import cv2
-import droneblocksutils.aruco_utils
 import math
 from droneblocksutils.aruco_utils import detect_markers_in_image
 import time
@@ -168,8 +165,21 @@ def adjust_or_not(expected_coor, curr_global_coor):
     return False
 
 
+def get_lapsed_time(log_file, start_time, cur_time):
+    time_lapsed = cur_time - start_time
+    log_file.write(f"timestamp: {time_lapsed}\n")
+    log_file.write(f"actual time: {cur_time}\n")
+    return time_lapsed
 
-def move_precisely(drone,instructions,log_file):
+def update_logfile_position(log_file, center_from_drone_pixel, rel_coor_cm, center_from_drone_cm, curr_global_coordinate):
+    log_file.write(f"center from drone: {center_from_drone_pixel}, id: {id}\n")
+    log_file.write(f"relative coor {rel_coor_cm}\n")
+    log_file.write(f"center_from_drone_cm: {center_from_drone_cm}\n")
+    log_file.write(f"curr_global_coor_before: {curr_global_coordinate}\n")
+    log_file.write(f"curr_global_coor_after: {curr_global_coordinate}\n")
+
+
+def move_precisely(drone, instructions, log_file):
     FRAME_DURATION = 1
     start_time = time.perf_counter()
     log_file.write(f"start time: {start_time}\n")
@@ -182,45 +192,30 @@ def move_precisely(drone,instructions,log_file):
                     yaw_velocity = 0)
 
     while True:
-        log_file.write("-------------------------------------------------------------\n")
-        log_file.write("\n")
-        log_file.write("-------------------------------------------------------------\n")
-
-        # Making sure that the drone is not turning off by making sure it always get a command
-        # drone.send_command_without_return("battery?")
         next_frame_time += FRAME_DURATION
         cur_time = time.perf_counter()
-        time_lapsed = cur_time - start_time
-        log_file.write(f"timestamp: {time_lapsed}\n")
-        log_file.write(f"actual time: {cur_time}\n")
+        time_lapsed = get_lapsed_time(next_frame_time, start_time, log_file)
 
         # get image
         frame = drone.background_frame_read.frame
-        
         # scan aruco from image
         image, arr = detect_markers_in_image(frame, draw_center=True, draw_reference_corner=True)
         
-        if not len(arr) == 0:
+        if not len(arr) == 0: # if the drone fails to detect any aruco the array will be empty
             center_from_drone_pixel, id = arr[0]
-            log_file.write(f"center from drone: {center_from_drone_pixel}, id: {id}\n")
             # translate relative position to relative position using standard measurement
             rel_coor_cm = get_rel_pos(center_from_drone_pixel)
-            log_file.write(f"relative coor {rel_coor_cm}\n")
             center_from_drone_cm = pixel_to_cm(rel_coor_cm,drone.get_distance_tof())
-            log_file.write(f"center_from_drone_cm: {center_from_drone_cm}\n")
             
             # translate relative position to global position
             curr_global_coordinate = get_global_coor(center_from_drone_cm, get_marker_coordinate(id,log_file))
-            log_file.write(f"curr_global_coor_before: {curr_global_coordinate}\n")
             curr_global_coordinate = roll_based_correction(drone,curr_global_coordinate,log_file)
-            log_file.write(f"curr_global_coor_after: {curr_global_coordinate}\n")
             default_speed = default_velocity(instructions,time_lapsed,log_file)
             expected_coordinate = get_expected_coor(instructions,time_lapsed)
+            update_logfile_position(log_file, center_from_drone_pixel, rel_coor_cm, center_from_drone_cm, curr_global_coordinate)
 
             # Checks to see if the drone is beyond 10cm from where it should be:
             if (adjust_or_not(expected_coordinate,curr_global_coordinate)):
-            # todo: readjust the yaw to the correct orientation
-            # adjust based on the position and orientation
                 adjust(drone,default_speed,expected_coordinate,curr_global_coordinate,FRAME_DURATION,log_file)
                 is_time_out = True
             else:
@@ -230,7 +225,7 @@ def move_precisely(drone,instructions,log_file):
                     yaw_velocity = 0)
         
 
-            if check_if_path_complete(curr_global_coordinate, instructions,time_lapsed,log_file):
+            if check_if_path_complete(curr_global_coordinate, instructions, time_lapsed, log_file):
                 log_file.write("complete\n")
                 print("complete")
                 # tell it to stop

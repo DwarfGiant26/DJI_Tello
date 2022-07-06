@@ -39,7 +39,7 @@ class Tello:
 
     # Video stream, server socket
     VS_UDP_IP = '0.0.0.0'
-    VS_UDP_PORT = 11111
+    VS_UDP_PORT = -1
 
     CONTROL_UDP_PORT = 8889
     STATE_UDP_PORT = 8890
@@ -110,6 +110,9 @@ class Tello:
 
         self.LOGGER.info("Tello instance was initialized. Host: '{}'. Port: '{}'.".format(host, Tello.CONTROL_UDP_PORT))
 
+    def set_vs_port(self,port_number):
+        self.VS_UDP_PORT = port_number
+        
     def get_own_udp_object(self):
         """Get own object from the global drones dict. This object is filled
         with responses and state information by the receiver threads.

@@ -23,8 +23,10 @@ def default_velocity(instructions,time_lapsed,log_file):
 
     x_velocity = (end_coord[0] - start_coord[0])/time_to_complete
     y_velocity = (end_coord[1] - start_coord[1])/time_to_complete
-    log_file.write(f"default velocity: {(x_velocity,y_velocity)}\n")
-    return (int(x_velocity),int(y_velocity))
+    z_velocity = (end_coord[2] - start_coord[2])/time_to_complete
+
+    log_file.write(f"default velocity: {(x_velocity,y_velocity,z_velocity)}\n")
+    return (int(x_velocity),int(y_velocity),int(z_velocity))
 
 def adjust(drone,default_speed,expected_coor,global_coor,frame_duration,log_file):
     # goal: try to adjust within 1 frame
@@ -74,13 +76,16 @@ def check_if_path_complete(current_coordinates, instructions, current_time,log_f
     if(start_coord[0] == end_coord[0] and start_coord[1] == end_coord[1]):
         if current_time >= time_to_complete:
             return True
+
     # Else drone is moving to a destination, check if the drones current location is near the desired destination.
     else:
         if (current_coordinates[0] >= end_coord[0]-MARGIN_OF_ERROR and current_coordinates[0] <= end_coord[0]+MARGIN_OF_ERROR):
             log_file.write("x finished\n")
             if (current_coordinates[1] >= end_coord[1] - MARGIN_OF_ERROR and current_coordinates[1] <= end_coord[1]+MARGIN_OF_ERROR):
                 log_file.write("y finished\n")
-                return True
+                if (current_coordinates[2] >= end_coord[2] - MARGIN_OF_ERROR and current_coordinates[2] <= end_coord[2]+MARGIN_OF_ERROR):
+                    log_file.write("z finished\n")
+                    return True
     return False  
     # instructions[droneid]. Format : [(start,destination,time_to_complete), ...]     
     
@@ -194,6 +199,7 @@ def update_logfile_position(log_file, center_from_drone_pixel, rel_coor_cm, cent
 
 def move_precisely(drone, instructions, log_file):
     FRAME_DURATION = 1
+    
     start_time = time.perf_counter()
     log_file.write(f"start time: {start_time}\n")
     print(f"start counter, drone ip: {drone.address[0]}")

@@ -24,6 +24,14 @@ To do so we use the software packet sender and do the following for each drone o
 2. Put the tello into SDK mode by sending the command: command 
 3. Then send the command: ap router_wifi_name password_of_the_router       (i.e: ap WIFI_E949 87094848)
 
-Then place the drones in the wanted formation.
+#### To fly the drone using aruco marker
 
-Finally open the jupyter notebook data_collection.ipynb and run all.
+1. Place drone facing north in the map.
+2. import ajdustment
+3. specify the instructions with format instructions = [drone1_instructions, drone2_instructions, drone3_instructions, drone4_instructions, ...]
+The format of dronex_instructions = [instruction1, instruction2, ...]
+The format of each instruction = ((start_x,start_y,start_z),(dest_x,dest_y,dest_z),time_to_complete)
+The example can be found in flight.py
+4. run ./udp_forward
+5. set vs port for each drone, and down vision. Example in flight.py
+6. fly the drone using move_precisely(). Example in flight.py
